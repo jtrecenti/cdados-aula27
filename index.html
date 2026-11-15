@@ -1211,9 +1211,9 @@ Julio Trecenti
 <p><span class="rotulo">Objetivos de aprendizagem</span></p>
 <p>A última aula de conteúdo: do modelo com <strong>uma</strong> variável explicativa para o modelo com <strong>várias</strong>. Ao final da aula, você deve ser capaz de:</p>
 <ul>
-<li>usar os <strong>resíduos</strong> para checar as suposições do modelo;</li>
-<li>interpretar um modelo com variáveis em <strong>escala log</strong>;</li>
-<li>ajustar e interpretar um modelo de <strong>regressão linear múltipla</strong>, com os testes t, o teste F e o <span class="math inline">\(R^2\)</span> ajustado.</li>
+<li>ajustar e interpretar um modelo de <strong>regressão linear múltipla</strong>, com os testes t, o teste F e o <span class="math inline">\(R^2\)</span> ajustado;</li>
+<li>escolher as variáveis do modelo e olhar os <strong>resíduos</strong> antes de confiar nele;</li>
+<li>interpretar um modelo com variáveis em <strong>escala log</strong>.</li>
 </ul>
 </div>
 </div>
@@ -1222,286 +1222,10 @@ Julio Trecenti
 <p><span class="rotulo">Roteiro</span></p>
 <ol type="1">
 <li><strong>Notebook da aula passada:</strong> terminar a Aula_Atividade (renda e CO₂).</li>
-<li><strong>Aula:</strong> suposições, escala log e regressão linear múltipla.</li>
-<li><strong>Notebook de hoje:</strong> Aula_Atividade de regressão múltipla, com o consumo de combustível dos carros.</li>
+<li><strong>Slides:</strong> regressão linear múltipla, com Python rodando aqui mesmo.</li>
+<li><strong>Para fechar:</strong> escala log, de volta ao CO₂.</li>
+<li><strong>Notebook de hoje:</strong> Aula27_Atividades, a APS 12.</li>
 </ol>
-<p>Nos notebooks: fazer individual e discutir em grupo.</p>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2 secao">
-<h2>Primeiro, o notebook</h2>
-<div class="miudo">
-<p>Terminar a Aula_Atividade da aula passada: renda e emissão de CO₂.</p>
-</div>
-</section>
-<section class="slide level2 muito-denso">
-<h2>Aula_Atividade: renda e CO₂</h2>
-<div class="colunas">
-<div style="flex:1.05">
-<div class="caixa caso">
-<p><span class="rotulo">O problema</span></p>
-<p>Explicar/prever a emissão de CO₂ per capita de um país (<span class="math inline">\(y\)</span>) pela renda per capita em mil dólares (<span class="math inline">\(x\)</span>), com os dados de 2010 do Gapminder (186 países).</p>
-</div>
-<div class="caixa exercicio">
-<p><span class="rotulo">No notebook, uns 25 minutos</span></p>
-<ul>
-<li><strong>Ex. 1:</strong> <span class="math inline">\(\hat\beta_1 = S_{XY}/S_{XX}\)</span> e <span class="math inline">\(\hat\beta_0 = \bar y - \hat\beta_1 \bar x\)</span>; interprete.</li>
-<li><strong>Ex. 2:</strong> resíduos pelas fórmulas, histograma e Q-Q.</li>
-<li><strong>Ex. 3:</strong> com o <code>statsmodels.OLS</code>, a emissão para renda de 40 mil dólares.</li>
-<li><strong>Ex. 4 e 5:</strong> <code>results.resid</code>. Os resíduos parecem normais?</li>
-<li><strong>Ex. 6 a 8:</strong> no <code>summary()</code>, valor-p de <span class="math inline">\(\hat\beta_1\)</span>, <span class="math inline">\(R^2\)</span> e normalidade.</li>
-</ul>
-</div>
-</div>
-<div>
-<div id="leg-confira" class="legendas">
-<div class="caixa">
-<p><span class="rotulo">Para conferir</span></p>
-<p>Avance quando a turma tiver terminado: os números de cada exercício aparecem aqui.</p>
-</div>
-<div class="caixa ideia">
-<p><span class="rotulo">Para conferir</span></p>
-<p><strong>Ex. 1:</strong> <span class="math inline">\(\hat\beta_0 = 0{,}656\)</span> e <span class="math inline">\(\hat\beta_1 = 0{,}243\)</span>. A cada mil dólares a mais de renda per capita, a emissão esperada sobe 0,243 t per capita.</p>
-<p><strong>Ex. 3:</strong> <code>results.predict([1, 40])</code> <span class="math inline">\(= 0{,}656 + 0{,}243 \times 40 = 10{,}39\)</span> t.</p>
-</div>
-<div class="caixa ideia">
-<p><span class="rotulo">Para conferir</span></p>
-<p><strong>Ex. 2, 4 e 5:</strong> os resíduos se concentram perto de zero, mas os pontos das pontas fogem da reta do Q-Q: caudas <strong>mais pesadas</strong> que as da normal (curtose 20,3). Não parecem normais.</p>
-</div>
-<div class="caixa ideia">
-<p><span class="rotulo">Para conferir</span></p>
-<p><strong>Ex. 6:</strong> valor-p de <span class="math inline">\(\hat\beta_1\)</span> = 0,000: a renda é relevante com qualquer α usual.</p>
-<p><strong>Ex. 7:</strong> <span class="math inline">\(R^2 = 0{,}561\)</span>: a renda explica 56% da variação da emissão.</p>
-<p><strong>Ex. 8:</strong> <code>Prob(Omnibus)</code> e <code>Prob(JB)</code> <span class="math inline">\(&lt; 0{,}001\)</span>: rejeitamos a normalidade dos resíduos.</p>
-</div>
-</div>
-</div>
-</div>
-<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
-</section>
-<section class="slide level2 secao">
-<h2>O que os resíduos dizem</h2>
-<div class="miudo">
-<p>O modelo de renda e CO₂ passou no teste de <span class="math inline">\(\beta_1\)</span>. Mas podemos confiar nele?</p>
-</div>
-</section>
-<section class="slide level2 denso">
-<h2>As suposições e como verificá-las</h2>
-<div class="suposicoes">
-<div class="sup fragment">
-<p>Os <strong>erros têm distribuição normal</strong>, <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>.</p>
-<p><span class="como">gráfico Q-Q, <code>Prob(Omnibus)</code> e <code>Prob(JB)</code></span></p>
-</div>
-<div class="sup fragment">
-<p>Os <strong>erros são independentes</strong> entre si, <span class="math inline">\(Corr(\varepsilon_i, \varepsilon_j) = 0\)</span> para <span class="math inline">\(i \neq j\)</span>.</p>
-<p><span class="como"><code>Durbin-Watson</code> perto de 2, quando há uma ordem</span></p>
-</div>
-<div class="sup fragment">
-<p>O <strong>modelo é linear</strong> nos parâmetros.</p>
-<p><span class="como">resíduos contra <span class="math inline">\(\hat y\)</span>: sem curva</span></p>
-</div>
-<div class="sup fragment">
-<p><strong>Homocedasticidade:</strong> <span class="math inline">\(Var(\varepsilon_i) = \sigma^2\)</span>, a mesma para todo <span class="math inline">\(i\)</span>.</p>
-<p><span class="como">resíduos contra <span class="math inline">\(\hat y\)</span> e contra <span class="math inline">\(x\)</span>: faixa de largura constante</span></p>
-</div>
-</div>
-<div class="caixa ideia fragment">
-<p><span class="rotulo">O teste t de <span class="math inline">\(\beta_1\)</span> depende delas</span></p>
-<p>O valor-p da tabela supõe que os erros são normais, independentes e com variância constante. Se elas falham, o valor-p e o intervalo de confiança deixam de valer.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Homocedasticidade: resíduos contra preditos</h2>
-<div class="colunas">
-<div style="flex:1.55">
-<div id="g-homo">
-
-</div>
-</div>
-<div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href aria-hidden="true" tabindex="-1"></a>plt.scatter(results.predict(X_dados),</span>
-<span id="cb1-2"><a href aria-hidden="true" tabindex="-1"></a>            results.resid)</span>
-<span id="cb1-3"><a href aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">&#39;r&#39;</span>)</span></code></pre></div>
-<div id="leg-homo" class="legendas">
-<div>
-<p>Cada ponto é um país: no eixo horizontal, a emissão prevista <span class="math inline">\(\hat y_i\)</span>; no vertical, o resíduo <span class="math inline">\(e_i = y_i - \hat y_i\)</span>.</p>
-</div>
-<div>
-<p>O ideal é uma <strong>faixa de largura constante</strong> em torno do zero, como no slide da análise de resíduos da aula passada.</p>
-</div>
-<div>
-<p>Aqui, a nuvem <strong>abre como um funil</strong>: quanto maior a emissão prevista, maior a variação dos resíduos. A variância não é constante.</p>
-</div>
-<div>
-<p>Com o Jarque-Bera rejeitando a normalidade e o funil, duas suposições falham: o modelo <strong>não deve ser usado para tomar decisões</strong> do jeito que está.</p>
-</div>
-</div>
-</div>
-</div>
-<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
-</section>
-<section class="slide level2 secao">
-<h2>Escala log</h2>
-<div class="miudo">
-<p>Uma solução comum: transformar as variáveis antes de ajustar a reta.</p>
-</div>
-</section>
-<section class="slide level2">
-<h2>Mudando a escala</h2>
-<div class="colunas">
-<div style="flex:1.55">
-<div id="g-log">
-
-</div>
-</div>
-<div>
-<div id="log-modos" class="botoes botoes-modo">
-<button data-modo="orig" class="ativo">
-escala original
-</button>
-<button data-modo="log">
-escala log
-</button>
-</div>
-<div id="log-painel">
-
-</div>
-<div class="codigo-mini">
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;log_income&#39;</span>] <span class="op">=</span> np.log(df[<span class="st">&#39;2010_income&#39;</span>])</span>
-<span id="cb2-2"><a href aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;log_co2&#39;</span>] <span class="op">=</span> np.log(df[<span class="st">&#39;2010_co2&#39;</span>])</span></code></pre></div>
-</div>
-<div class="miudo">
-<p><code>np.log</code> é o logaritmo natural. Clique nos botões: os mesmos 186 países, a reta e os resíduos são recalculados em cada escala.</p>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2 denso">
-<h2>O modelo log-log</h2>
-<div class="colunas">
-<div>
-<div class="eq-termos eq-menor">
-<div class="termo t-y">
-<p><span class="math inline">\(\log y_i\)</span> <span class="nome">log da emissão</span></p>
-</div>
-<div class="op">
-<p><span class="math inline">\(=\)</span></p>
-</div>
-<div class="termo t-b0">
-<p><span class="math inline">\(\beta_0\)</span> <span class="nome">intercepto</span></p>
-</div>
-<div class="op">
-<p><span class="math inline">\(+\)</span></p>
-</div>
-<div class="termo t-b1">
-<p><span class="math inline">\(\beta_1\)</span> <span class="nome">inclinação</span></p>
-</div>
-<div class="termo t-x">
-<p><span class="math inline">\(\log x_i\)</span> <span class="nome">log da renda</span></p>
-</div>
-<div class="op">
-<p><span class="math inline">\(+\)</span></p>
-</div>
-<div class="termo t-e">
-<p><span class="math inline">\(\varepsilon_i\)</span> <span class="nome">erro aleatório</span></p>
-</div>
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href aria-hidden="true" tabindex="-1"></a>logxc <span class="op">=</span> sm.add_constant(df[<span class="st">&#39;log_income&#39;</span>])</span>
-<span id="cb3-2"><a href aria-hidden="true" tabindex="-1"></a>results_log <span class="op">=</span> sm.OLS(df[<span class="st">&#39;log_co2&#39;</span>], logxc).fit()</span>
-<span id="cb3-3"><a href aria-hidden="true" tabindex="-1"></a>results_log.summary()</span></code></pre></div>
-<div id="leg-loglog" class="legendas">
-<div>
-<p>O mesmo <code>sm.OLS</code>, agora com as duas colunas em log.</p>
-</div>
-<div>
-<p><span class="math inline">\(\hat\beta_1 = 1{,}2135\)</span>, com valor-p 0,000: o log da renda continua <strong>significante</strong> para explicar o log da emissão.</p>
-</div>
-<div>
-<p><span class="math inline">\(R^2 = 0{,}819\)</span>. <strong>Cuidado:</strong> não dá para comparar com o 0,561 do modelo original, porque a variável resposta mudou (<span class="math inline">\(\log y\)</span> no lugar de <span class="math inline">\(y\)</span>).</p>
-</div>
-<div>
-<p>Os resíduos: o Jarque-Bera ainda rejeita a normalidade (valor-p <span class="math inline">\(\approx 10^{-46}\)</span>), mas bem menos que antes (209,9 contra 2384,4). O <code>Durbin-Watson</code> fica perto de 2.</p>
-</div>
-</div>
-</div>
-<div style="flex:1.1">
-<div id="sm-log">
-
-</div>
-</div>
-</div>
-<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
-</section>
-<section class="slide level2">
-<h2>Interpretando o <span class="math inline">\(\hat\beta_1\)</span> do log-log</h2>
-<div class="colunas">
-<div style="flex:1.45">
-<div id="g-elas">
-
-</div>
-</div>
-<div>
-<div class="caixa ideia">
-<p><span class="rotulo">Elasticidade</span></p>
-<p>No modelo log-log, <span class="math inline">\(\hat\beta_1\)</span> é uma <strong>elasticidade</strong>: se a renda sobe <strong>1%</strong>, a emissão esperada sobe cerca de <strong>1,21%</strong>.</p>
-</div>
-<div class="ctrl">
-<p><label class="ctrl-rotulo">aumento da renda: <b id="el-p-v"></b></label> <input type="range" id="el-p" min="0" max="100" step="1" value="10"></p>
-</div>
-<div id="el-contas" class="contas">
-
-</div>
-<div class="miudo">
-<p>Voltando à escala original, a reta vira a curva <span class="math inline">\(\hat y = e^{-2{,}055}\, x^{1{,}2135}\)</span>. Para mais detalhes da interpretação, veja Montgomery e Runger (2018).</p>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2 denso">
-<h2>Para votar</h2>
-<div class="votos-sm">
-<div class="caixa exercicio">
-<p><span class="rotulo">Pergunta 1</span></p>
-<p>No modelo <strong>original</strong>, o gráfico de resíduos contra preditos abre como um funil. Qual suposição está em dúvida?</p>
-<div class="alternativas">
-<ul>
-<li><strong>A</strong> Independência</li>
-<li><strong>B</strong> Homocedasticidade</li>
-<li><strong>C</strong> Linearidade</li>
-</ul>
-</div>
-<div class="resposta fragment">
-<p><strong>B</strong>: a variância dos resíduos cresce com <span class="math inline">\(\hat y\)</span>.</p>
-</div>
-</div>
-<div class="caixa exercicio">
-<p><span class="rotulo">Pergunta 2</span></p>
-<p>No modelo log-log, <span class="math inline">\(\hat\beta_1 = 1{,}21\)</span>. Um país com renda <strong>10% maior</strong> tem emissão esperada…</p>
-<div class="alternativas">
-<ul>
-<li><strong>A</strong> 1,21 t maior</li>
-<li><strong>B</strong> cerca de 12% maior</li>
-<li><strong>C</strong> 10% maior</li>
-</ul>
-</div>
-<div class="resposta fragment">
-<p><strong>B</strong>: <span class="math inline">\(1{,}1^{1{,}2135} = 1{,}123\)</span>, ou seja, cerca de 12% a mais.</p>
-</div>
-</div>
-<div class="caixa exercicio">
-<p><span class="rotulo">Pergunta 3</span></p>
-<p>O <span class="math inline">\(R^2\)</span> passou de 0,561 para 0,819 com o log. Podemos dizer que o modelo log é melhor por causa disso?</p>
-<div class="alternativas">
-<ul>
-<li><strong>A</strong> Sim, o <span class="math inline">\(R^2\)</span> é maior</li>
-<li><strong>B</strong> Não, a resposta mudou de escala</li>
-<li><strong>C</strong> Não, o <span class="math inline">\(R^2\)</span> nunca muda</li>
-</ul>
-</div>
-<div class="resposta fragment">
-<p><strong>B</strong>: um explica <span class="math inline">\(y\)</span>, o outro <span class="math inline">\(\log y\)</span>. Compare pelos resíduos.</p>
 </div>
 </div>
 </div>
@@ -1513,12 +1237,12 @@ escala log
 </div>
 </section>
 <section class="slide level2 denso">
-<h2>O problema: consumo de combustível</h2>
+<h2>Quanto um carro consome?</h2>
 <div class="colunas">
 <div>
 <div class="caixa caso">
 <p><span class="rotulo">Auto MPG</span></p>
-<p>Dados de <strong>392 carros</strong> produzidos entre 1970 e 1982 (UCI Machine Learning Repository). Queremos explicar o consumo, em <strong>milhas por galão</strong> (<code>mpg</code>), pelas características técnicas do carro.</p>
+<p>Dados de <strong>392 carros</strong> produzidos entre 1970 e 1982 (UCI Machine Learning Repository), os mesmos do notebook de hoje. Queremos explicar o consumo, em <strong>milhas por galão</strong> (<code>mpg</code>), pelas características técnicas do carro.</p>
 <p>Quanto <strong>maior</strong> o <code>mpg</code>, mais econômico o carro.</p>
 </div>
 <div class="caixa ideia fragment">
@@ -1540,6 +1264,28 @@ escala log
 </div>
 </div>
 </section>
+<section class="slide level2 denso">
+<h2>Os dados no Python</h2>
+<div class="colunas">
+<div style="flex:1">
+<div class="py-vivo" data-saida="#py-dados-saida">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;auto_mpg_sub.csv&quot;</span>)</span>
+<span id="cb1-2"><a href aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> data[[<span class="st">&#39;mpg&#39;</span>, <span class="st">&#39;cylinders&#39;</span>, <span class="st">&#39;displacement&#39;</span>,</span>
+<span id="cb1-3"><a href aria-hidden="true" tabindex="-1"></a>           <span class="st">&#39;horsepower&#39;</span>, <span class="st">&#39;weight&#39;</span>, <span class="st">&#39;acceleration&#39;</span>,</span>
+<span id="cb1-4"><a href aria-hidden="true" tabindex="-1"></a>           <span class="st">&#39;model year&#39;</span>]].copy()</span>
+<span id="cb1-5"><a href aria-hidden="true" tabindex="-1"></a>df.describe().<span class="bu">round</span>(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div class="miudo">
+<p>Este Python roda aqui no navegador, com o mesmo arquivo do notebook. Já estão carregados <code>pd</code>, <code>np</code>, <code>sm</code>, <code>stats</code> e a função <code>regress</code> do notebook. Dá para editar e rodar de novo: tente <code>df.head()</code> ou <code>df.corr().round(2)</code>.</p>
+</div>
+</div>
+<div style="flex:1.25">
+<div id="py-dados-saida" class="py-saida-media">
+
+</div>
+</div>
+</div>
+</section>
 <section class="slide level2">
 <h2>Cada variável sozinha</h2>
 <div class="colunas">
@@ -1549,8 +1295,8 @@ escala log
 </div>
 </div>
 <div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href aria-hidden="true" tabindex="-1"></a>sns.pairplot(df, x_vars<span class="op">=</span><span class="bu">list</span>(df),</span>
-<span id="cb4-2"><a href aria-hidden="true" tabindex="-1"></a>             y_vars<span class="op">=</span>[<span class="st">&#39;mpg&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href aria-hidden="true" tabindex="-1"></a>sns.pairplot(df, x_vars<span class="op">=</span><span class="bu">list</span>(df),</span>
+<span id="cb2-2"><a href aria-hidden="true" tabindex="-1"></a>             y_vars<span class="op">=</span>[<span class="st">&#39;mpg&#39;</span>])</span></code></pre></div>
 <div id="pares-info" class="contas">
 
 </div>
@@ -1581,8 +1327,8 @@ escala log
 </div>
 </div>
 <div class="codigo-mini">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;weight&#39;</span>, <span class="st">&#39;model year&#39;</span>]]</span>
-<span id="cb5-2"><a href aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> sm.OLS(Y, sm.add_constant(X)).fit()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;weight&#39;</span>, <span class="st">&#39;model year&#39;</span>]]</span>
+<span id="cb3-2"><a href aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> regress(Y, X)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1614,6 +1360,62 @@ escala log
 </div>
 </section>
 <section class="slide level2 denso">
+<h2>Ajustando com todas as variáveis</h2>
+<div class="colunas">
+<div style="flex:0.85">
+<div class="py-vivo" data-saida="#py-ajuste-saida">
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;cylinders&#39;</span>, <span class="st">&#39;displacement&#39;</span>,</span>
+<span id="cb4-2"><a href aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;horsepower&#39;</span>, <span class="st">&#39;weight&#39;</span>,</span>
+<span id="cb4-3"><a href aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;acceleration&#39;</span>, <span class="st">&#39;model year&#39;</span>]]</span>
+<span id="cb4-4"><a href aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> df[<span class="st">&#39;mpg&#39;</span>]</span>
+<span id="cb4-5"><a href aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> regress(Y, X)</span>
+<span id="cb4-6"><a href aria-hidden="true" tabindex="-1"></a>results.summary()</span></code></pre></div>
+</div>
+<div class="miudo">
+<p>O Passo 2 do notebook. Experimente tirar uma variável da lista e rodar de novo: o que acontece com os outros coeficientes?</p>
+</div>
+</div>
+<div style="flex:1.3">
+<div id="py-ajuste-saida" class="py-saida-menor">
+
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2 denso">
+<h2>Uma linha para cada variável</h2>
+<div class="colunas">
+<div style="flex:1.45">
+<div id="sm-mult">
+
+</div>
+</div>
+<div>
+<div id="leg-mult" class="legendas">
+<div>
+<p>A mesma tabela da regressão simples, com <strong>uma linha por variável</strong> explicativa.</p>
+</div>
+<div>
+<p><strong><code>coef</code></strong>: cada <span class="math inline">\(\hat\beta_j\)</span> é o efeito de <span class="math inline">\(x_j\)</span> sobre o <code>mpg</code> esperado <strong>mantidas as demais variáveis constantes</strong>.</p>
+</div>
+<div>
+<p><strong><code>P&gt;|t|</code></strong>: um teste t para <strong>cada</strong> coeficiente, <span class="math inline">\(H_0: \beta_j = 0\)</span> contra <span class="math inline">\(H_1: \beta_j \neq 0\)</span>. Só <code>weight</code> e <code>model year</code> têm valor-p menor que 10%.</p>
+</div>
+<div>
+<p><strong><code>F-statistic</code></strong> e <strong><code>Prob (F-statistic)</code></strong>: o teste F, que olha para <strong>todos os coeficientes ao mesmo tempo</strong> (daqui a dois slides).</p>
+</div>
+<div>
+<p><strong><code>R-squared</code></strong> = 0,809 e <strong><code>Adj. R-squared</code></strong> = 0,806: com várias variáveis, o ajustado é o que importa (daqui a três slides).</p>
+</div>
+<div>
+<p><strong><code>Df Model</code></strong> = 6 variáveis e <strong><code>Df Residuals</code></strong> = 392 − 6 − 1 = 385, os graus de liberdade do teste t de cada coeficiente.</p>
+</div>
+</div>
+</div>
+</div>
+<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
+</section>
+<section class="slide level2 denso">
 <h2>O coeficiente depende de quem está no modelo</h2>
 <div class="colunas">
 <div>
@@ -1641,43 +1443,7 @@ com as 6 variáveis
 </div>
 </section>
 <section class="slide level2 denso">
-<h2>A saída com várias variáveis</h2>
-<div class="colunas">
-<div style="flex:1.45">
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;cylinders&#39;</span>, <span class="st">&#39;displacement&#39;</span>, <span class="st">&#39;horsepower&#39;</span>,</span>
-<span id="cb6-2"><a href aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;weight&#39;</span>, <span class="st">&#39;acceleration&#39;</span>, <span class="st">&#39;model year&#39;</span>]]</span>
-<span id="cb6-3"><a href aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> sm.OLS(Y, sm.add_constant(X)).fit()</span></code></pre></div>
-<div id="sm-mult">
-
-</div>
-</div>
-<div>
-<div id="leg-mult" class="legendas">
-<div>
-<p>A mesma tabela, com <strong>uma linha por variável</strong> explicativa.</p>
-</div>
-<div>
-<p><strong><code>coef</code></strong>: cada <span class="math inline">\(\hat\beta_j\)</span> é o efeito de <span class="math inline">\(x_j\)</span> sobre o <code>mpg</code> esperado <strong>mantidas as demais variáveis constantes</strong>.</p>
-</div>
-<div>
-<p><strong><code>P&gt;|t|</code></strong>: um teste t para <strong>cada</strong> coeficiente, <span class="math inline">\(H_0: \beta_j = 0\)</span> contra <span class="math inline">\(H_1: \beta_j \neq 0\)</span>. Só <code>weight</code> e <code>model year</code> têm valor-p menor que 10%.</p>
-</div>
-<div>
-<p><strong><code>F-statistic</code></strong> e <strong><code>Prob (F-statistic)</code></strong>: o teste F, que olha para <strong>todos os coeficientes ao mesmo tempo</strong> (próximo slide).</p>
-</div>
-<div>
-<p><strong><code>R-squared</code></strong> = 0,809 e <strong><code>Adj. R-squared</code></strong> = 0,806: com várias variáveis, o ajustado é o que importa (daqui a dois slides).</p>
-</div>
-<div>
-<p><strong><code>Df Model</code></strong> = 6 variáveis e <strong><code>Df Residuals</code></strong> = 392 − 6 − 1 = 385, os graus de liberdade do teste t de cada coeficiente.</p>
-</div>
-</div>
-</div>
-</div>
-<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
-</section>
-<section class="slide level2 denso">
-<h2>O teste F: o modelo serve para alguma coisa?</h2>
+<h2>O modelo serve para alguma coisa?</h2>
 <div class="colunas">
 <div>
 <div class="hip-par">
@@ -1689,7 +1455,7 @@ com as 6 variáveis
 <p>pelo menos uma ajuda</p>
 </div>
 <div class="caixa ideia fragment">
-<p><span class="rotulo">A ideia</span></p>
+<p><span class="rotulo">O teste F</span></p>
 <p>Compara a variação explicada pelo modelo com a que sobra nos resíduos: <span class="math display">\[F = \frac{SQReg / k}{SQRes / (n - k - 1)}\]</span> Sob <span class="math inline">\(H_0\)</span> (e com as suposições), <span class="math inline">\(F\)</span> segue uma distribuição <strong>F</strong> com <span class="math inline">\(k\)</span> e <span class="math inline">\(n - k - 1\)</span> graus de liberdade.</p>
 </div>
 </div>
@@ -1706,7 +1472,7 @@ com as 6 variáveis
 </div>
 </section>
 <section class="slide level2 denso">
-<h2><span class="math inline">\(R^2\)</span> e <span class="math inline">\(R^2\)</span> ajustado</h2>
+<h2>Mais variáveis, <span class="math inline">\(R^2\)</span> maior?</h2>
 <div class="colunas">
 <div style="flex:1.35">
 <div id="g-r2a">
@@ -1739,7 +1505,34 @@ sortear outro ruído
 </div>
 </section>
 <section class="slide level2 denso">
-<h2>Escolhendo as variáveis: <em>backward stepwise</em></h2>
+<h2>O mesmo teste com os 392 carros</h2>
+<div class="colunas">
+<div style="flex:1.1">
+<div class="py-vivo" data-saida="#py-ruido-saida">
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb5-2"><a href aria-hidden="true" tabindex="-1"></a>ruido <span class="op">=</span> pd.DataFrame(rng.normal(size<span class="op">=</span>(<span class="bu">len</span>(X), <span class="dv">40</span>)))</span>
+<span id="cb5-3"><a href aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">40</span>]:</span>
+<span id="cb5-5"><a href aria-hidden="true" tabindex="-1"></a>    Xk <span class="op">=</span> pd.concat([X, ruido.iloc[:, :k]], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-6"><a href aria-hidden="true" tabindex="-1"></a>    Xk.columns <span class="op">=</span> Xk.columns.astype(<span class="bu">str</span>)</span>
+<span id="cb5-7"><a href aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> regress(Y, Xk)</span>
+<span id="cb5-8"><a href aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;</span><span class="sc">{</span>k<span class="sc">:2d}</span><span class="ss"> colunas de ruído:&#39;</span>,</span>
+<span id="cb5-9"><a href aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&#39;R² = </span><span class="sc">{</span>r<span class="sc">.</span>rsquared<span class="sc">:.4f}</span><span class="ss">&#39;</span>,</span>
+<span id="cb5-10"><a href aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&#39;ajustado = </span><span class="sc">{</span>r<span class="sc">.</span>rsquared_adj<span class="sc">:.4f}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+</div>
+</div>
+<div>
+<div id="py-ruido-saida">
+
+</div>
+<div class="miudo">
+<p>As 6 variáveis do modelo, mais até 40 colunas de números sorteados, sem relação nenhuma com o consumo. O <span class="math inline">\(R^2\)</span> sobe sempre; o ajustado fica parado ou cai. Mude a semente (o 42): às vezes o ajustado sobe um pouco por acaso, mas bem menos que o <span class="math inline">\(R^2\)</span>.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2 denso">
+<h2>Quais variáveis ficam no modelo?</h2>
 <div class="colunas">
 <div style="flex:1.3">
 <div id="g-step">
@@ -1748,7 +1541,7 @@ sortear outro ruído
 </div>
 <div>
 <div class="caixa ideia">
-<p><span class="rotulo">O método</span></p>
+<p><span class="rotulo"><em>Backward stepwise</em></span></p>
 <ol type="1">
 <li>Ajuste o modelo com <strong>todas</strong> as variáveis.</li>
 <li>Se a de <strong>maior valor-p</strong> tiver valor-p <span class="math inline">\(&gt; \alpha\)</span> (aqui, 10%), retire-a e ajuste de novo.</li>
@@ -1766,7 +1559,32 @@ sortear outro ruído
 <p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
 </section>
 <section class="slide level2 denso">
-<h2>O modelo final e as suposições</h2>
+<h2>Quando dá para confiar nos testes?</h2>
+<div class="suposicoes">
+<div class="sup fragment">
+<p>Os <strong>erros têm distribuição normal</strong>, <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>.</p>
+<p><span class="como">gráfico Q-Q, <code>Prob(Omnibus)</code> e <code>Prob(JB)</code></span></p>
+</div>
+<div class="sup fragment">
+<p>Os <strong>erros são independentes</strong> entre si, <span class="math inline">\(Corr(\varepsilon_i, \varepsilon_j) = 0\)</span> para <span class="math inline">\(i \neq j\)</span>.</p>
+<p><span class="como"><code>Durbin-Watson</code> perto de 2, quando há uma ordem</span></p>
+</div>
+<div class="sup fragment">
+<p>O <strong>modelo é linear</strong> nos parâmetros.</p>
+<p><span class="como">resíduos contra <span class="math inline">\(\hat y\)</span>: sem curva</span></p>
+</div>
+<div class="sup fragment">
+<p><strong>Homocedasticidade:</strong> <span class="math inline">\(Var(\varepsilon_i) = \sigma^2\)</span>, a mesma para todo <span class="math inline">\(i\)</span>.</p>
+<p><span class="como">resíduos contra <span class="math inline">\(\hat y\)</span> e contra cada <span class="math inline">\(x\)</span>: faixa de largura constante</span></p>
+</div>
+</div>
+<div class="caixa ideia fragment">
+<p><span class="rotulo">Os valores-p dependem delas</span></p>
+<p>Os testes t e F supõem que os erros são normais, independentes e com variância constante. Se elas falham, os valores-p e os intervalos de confiança deixam de valer.</p>
+</div>
+</section>
+<section class="slide level2 denso">
+<h2>Os resíduos do modelo final</h2>
 <div class="colunas">
 <div style="flex:1.5">
 <div id="g-supf">
@@ -1795,10 +1613,38 @@ resíduos na ordem
 </div>
 </section>
 <section class="slide level2 denso">
+<h2>Os gráficos de resíduos no Python</h2>
+<div class="colunas">
+<div style="flex:0.95">
+<div class="py-vivo" data-saida="#py-resid-saida">
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-2"><a href aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb6-4"><a href aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].scatter(results.fittedvalues,</span>
+<span id="cb6-5"><a href aria-hidden="true" tabindex="-1"></a>              results.resid, s<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb6-6"><a href aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">&#39;r&#39;</span>)</span>
+<span id="cb6-7"><a href aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">&#39;mpg previsto&#39;</span>)</span>
+<span id="cb6-8"><a href aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">&#39;resíduo&#39;</span>)</span>
+<span id="cb6-9"><a href aria-hidden="true" tabindex="-1"></a>stats.probplot(results.resid, dist<span class="op">=</span><span class="st">&#39;norm&#39;</span>,</span>
+<span id="cb6-10"><a href aria-hidden="true" tabindex="-1"></a>               plot<span class="op">=</span>ax[<span class="dv">1</span>])</span>
+<span id="cb6-11"><a href aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</div>
+<div class="miudo">
+<p>Aqui com o modelo de 6 variáveis, o <code>results</code> do slide “Ajustando com todas as variáveis”. No notebook, faça o mesmo com o seu modelo final.</p>
+</div>
+</div>
+<div style="flex:1.3">
+<div id="py-resid-saida">
+
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2 denso">
 <h2>Para votar</h2>
 <div class="votos-sm">
 <div class="caixa exercicio">
-<p><span class="rotulo">Pergunta 4</span></p>
+<p><span class="rotulo">Pergunta 1</span></p>
 <p>No modelo final, <span class="math inline">\(\hat\beta_{\text{weight}} = -0{,}0066\)</span>. A interpretação correta é:</p>
 <div class="alternativas">
 <ul>
@@ -1812,7 +1658,7 @@ resíduos na ordem
 </div>
 </div>
 <div class="caixa exercicio">
-<p><span class="rotulo">Pergunta 5</span></p>
+<p><span class="rotulo">Pergunta 2</span></p>
 <p>No modelo com 6 variáveis, <code>horsepower</code> tem valor-p 0,977. Isso quer dizer que a potência não tem relação com o consumo?</p>
 <div class="alternativas">
 <ul>
@@ -1826,7 +1672,7 @@ resíduos na ordem
 </div>
 </div>
 <div class="caixa exercicio">
-<p><span class="rotulo">Pergunta 6</span></p>
+<p><span class="rotulo">Pergunta 3</span></p>
 <p>Para escolher entre dois modelos com números diferentes de variáveis, qual medida de ajuste usar?</p>
 <div class="alternativas">
 <ul>
@@ -1841,33 +1687,227 @@ resíduos na ordem
 </div>
 </div>
 </section>
+<section class="slide level2 secao">
+<h2>Para fechar: escala log</h2>
+<div class="miudo">
+<p>De volta à renda e ao CO₂ do notebook da aula passada.</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Os resíduos abrem como um funil</h2>
+<div class="colunas">
+<div style="flex:1.55">
+<div id="g-homo">
+
+</div>
+</div>
+<div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href aria-hidden="true" tabindex="-1"></a>plt.scatter(results.predict(X_dados),</span>
+<span id="cb7-2"><a href aria-hidden="true" tabindex="-1"></a>            results.resid)</span>
+<span id="cb7-3"><a href aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">&#39;r&#39;</span>)</span></code></pre></div>
+<div id="leg-homo" class="legendas">
+<div>
+<p>Cada ponto é um país: no eixo horizontal, a emissão prevista <span class="math inline">\(\hat y_i\)</span>; no vertical, o resíduo <span class="math inline">\(e_i = y_i - \hat y_i\)</span>.</p>
+</div>
+<div>
+<p>O ideal é uma <strong>faixa de largura constante</strong> em torno do zero, como no slide da análise de resíduos da aula passada.</p>
+</div>
+<div>
+<p>Aqui, a nuvem <strong>abre como um funil</strong>: quanto maior a emissão prevista, maior a variação dos resíduos. A variância não é constante.</p>
+</div>
+<div>
+<p>Com o Jarque-Bera rejeitando a normalidade e o funil, duas suposições falham: o modelo <strong>não deve ser usado para tomar decisões</strong> do jeito que está.</p>
+</div>
+</div>
+</div>
+</div>
+<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
+</section>
+<section class="slide level2">
+<h2>Mudando a escala</h2>
+<div class="colunas">
+<div style="flex:1.55">
+<div id="g-log">
+
+</div>
+</div>
+<div>
+<div id="log-modos" class="botoes botoes-modo">
+<button data-modo="orig" class="ativo">
+escala original
+</button>
+<button data-modo="log">
+escala log
+</button>
+</div>
+<div id="log-painel">
+
+</div>
+<div class="codigo-mini">
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;log_income&#39;</span>] <span class="op">=</span> np.log(df[<span class="st">&#39;2010_income&#39;</span>])</span>
+<span id="cb8-2"><a href aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;log_co2&#39;</span>] <span class="op">=</span> np.log(df[<span class="st">&#39;2010_co2&#39;</span>])</span></code></pre></div>
+</div>
+<div class="miudo">
+<p><code>np.log</code> é o logaritmo natural. Clique nos botões: os mesmos 186 países, a reta e os resíduos são recalculados em cada escala.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2 denso">
+<h2>A reta com as duas variáveis em log</h2>
+<div class="colunas">
+<div>
+<div class="eq-termos eq-menor">
+<div class="termo t-y">
+<p><span class="math inline">\(\log y_i\)</span> <span class="nome">log da emissão</span></p>
+</div>
+<div class="op">
+<p><span class="math inline">\(=\)</span></p>
+</div>
+<div class="termo t-b0">
+<p><span class="math inline">\(\beta_0\)</span> <span class="nome">intercepto</span></p>
+</div>
+<div class="op">
+<p><span class="math inline">\(+\)</span></p>
+</div>
+<div class="termo t-b1">
+<p><span class="math inline">\(\beta_1\)</span> <span class="nome">inclinação</span></p>
+</div>
+<div class="termo t-x">
+<p><span class="math inline">\(\log x_i\)</span> <span class="nome">log da renda</span></p>
+</div>
+<div class="op">
+<p><span class="math inline">\(+\)</span></p>
+</div>
+<div class="termo t-e">
+<p><span class="math inline">\(\varepsilon_i\)</span> <span class="nome">erro aleatório</span></p>
+</div>
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href aria-hidden="true" tabindex="-1"></a>logxc <span class="op">=</span> sm.add_constant(df[<span class="st">&#39;log_income&#39;</span>])</span>
+<span id="cb9-2"><a href aria-hidden="true" tabindex="-1"></a>results_log <span class="op">=</span> sm.OLS(df[<span class="st">&#39;log_co2&#39;</span>], logxc).fit()</span>
+<span id="cb9-3"><a href aria-hidden="true" tabindex="-1"></a>results_log.summary()</span></code></pre></div>
+<div id="leg-loglog" class="legendas">
+<div>
+<p>O mesmo <code>sm.OLS</code>, agora com as duas colunas em log.</p>
+</div>
+<div>
+<p><span class="math inline">\(\hat\beta_1 = 1{,}2135\)</span>, com valor-p 0,000: o log da renda continua <strong>significante</strong> para explicar o log da emissão.</p>
+</div>
+<div>
+<p><span class="math inline">\(R^2 = 0{,}819\)</span>. <strong>Cuidado:</strong> não dá para comparar com o 0,561 do modelo original, porque a variável resposta mudou (<span class="math inline">\(\log y\)</span> no lugar de <span class="math inline">\(y\)</span>).</p>
+</div>
+<div>
+<p>Os resíduos: o Jarque-Bera ainda rejeita a normalidade (valor-p <span class="math inline">\(\approx 10^{-46}\)</span>), mas bem menos que antes (209,9 contra 2384,4). O <code>Durbin-Watson</code> fica perto de 2.</p>
+</div>
+</div>
+</div>
+<div style="flex:1.1">
+<div id="sm-log">
+
+</div>
+</div>
+</div>
+<p><span class="fragment passo"></span> <span class="fragment passo"></span> <span class="fragment passo"></span></p>
+</section>
+<section class="slide level2">
+<h2>Se a renda sobe 1%, quanto sobe a emissão?</h2>
+<div class="colunas">
+<div style="flex:1.45">
+<div id="g-elas">
+
+</div>
+</div>
+<div>
+<div class="caixa ideia">
+<p><span class="rotulo">Elasticidade</span></p>
+<p>No modelo log-log, <span class="math inline">\(\hat\beta_1\)</span> é uma <strong>elasticidade</strong>: se a renda sobe <strong>1%</strong>, a emissão esperada sobe cerca de <strong>1,21%</strong>.</p>
+</div>
+<div class="ctrl">
+<p><label class="ctrl-rotulo">aumento da renda: <b id="el-p-v"></b></label> <input type="range" id="el-p" min="0" max="100" step="1" value="10"></p>
+</div>
+<div id="el-contas" class="contas">
+
+</div>
+<div class="miudo">
+<p>Voltando à escala original, a reta vira a curva <span class="math inline">\(\hat y = e^{-2{,}055}\, x^{1{,}2135}\)</span>. Para mais detalhes da interpretação, veja Montgomery e Runger (2018).</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2 denso">
+<h2>Para votar</h2>
+<div class="votos-sm">
+<div class="caixa exercicio">
+<p><span class="rotulo">Pergunta 4</span></p>
+<p>No modelo <strong>original</strong> de renda e CO₂, o gráfico de resíduos contra preditos abre como um funil. Qual suposição está em dúvida?</p>
+<div class="alternativas">
+<ul>
+<li><strong>A</strong> Independência</li>
+<li><strong>B</strong> Homocedasticidade</li>
+<li><strong>C</strong> Linearidade</li>
+</ul>
+</div>
+<div class="resposta fragment">
+<p><strong>B</strong>: a variância dos resíduos cresce com <span class="math inline">\(\hat y\)</span>.</p>
+</div>
+</div>
+<div class="caixa exercicio">
+<p><span class="rotulo">Pergunta 5</span></p>
+<p>No modelo log-log, <span class="math inline">\(\hat\beta_1 = 1{,}21\)</span>. Um país com renda <strong>10% maior</strong> tem emissão esperada…</p>
+<div class="alternativas">
+<ul>
+<li><strong>A</strong> 1,21 t maior</li>
+<li><strong>B</strong> cerca de 12% maior</li>
+<li><strong>C</strong> 10% maior</li>
+</ul>
+</div>
+<div class="resposta fragment">
+<p><strong>B</strong>: <span class="math inline">\(1{,}1^{1{,}2135} = 1{,}123\)</span>, ou seja, cerca de 12% a mais.</p>
+</div>
+</div>
+<div class="caixa exercicio">
+<p><span class="rotulo">Pergunta 6</span></p>
+<p>O <span class="math inline">\(R^2\)</span> passou de 0,561 para 0,819 com o log. Podemos dizer que o modelo log é melhor por causa disso?</p>
+<div class="alternativas">
+<ul>
+<li><strong>A</strong> Sim, o <span class="math inline">\(R^2\)</span> é maior</li>
+<li><strong>B</strong> Não, a resposta mudou de escala</li>
+<li><strong>C</strong> Não, o <span class="math inline">\(R^2\)</span> nunca muda</li>
+</ul>
+</div>
+<div class="resposta fragment">
+<p><strong>B</strong>: um explica <span class="math inline">\(y\)</span>, o outro <span class="math inline">\(\log y\)</span>. Compare pelos resíduos.</p>
+</div>
+</div>
+</div>
+</section>
 <section class="slide level2 muito-denso">
-<h2>Resumo e próximos passos</h2>
+<h2>O que vimos hoje</h2>
 <div class="colunas">
 <div>
 <div class="caixa ideia">
 <p><span class="rotulo">Pontos principais da aula</span></p>
 <ul>
-<li><strong>Suposições:</strong> antes de usar o modelo, olhe os resíduos: gráfico Q-Q, resíduos contra <span class="math inline">\(\hat y\)</span> e contra cada <span class="math inline">\(x\)</span>, Omnibus, Jarque-Bera e Durbin-Watson.</li>
-<li><strong>Escala log:</strong> pode corrigir funis e assimetrias. No log-log, <span class="math inline">\(\hat\beta_1\)</span> é a variação percentual de <span class="math inline">\(y\)</span> para 1% a mais em <span class="math inline">\(x\)</span>.</li>
 <li><strong>Regressão múltipla:</strong> <span class="math inline">\(Y = \beta_0 + \beta_1 x_1 + \cdots + \beta_k x_k + \varepsilon\)</span>; cada <span class="math inline">\(\beta_j\)</span> é o efeito de <span class="math inline">\(x_j\)</span> <strong>mantidas as demais constantes</strong>.</li>
 <li><strong>Testes:</strong> um teste t por coeficiente e o teste F para o modelo todo.</li>
 <li><strong>Comparar modelos:</strong> pelo <span class="math inline">\(R^2\)</span> ajustado, nunca pelo <span class="math inline">\(R^2\)</span>.</li>
 <li><strong>Backward stepwise:</strong> retirar, uma a uma, as variáveis com valor-p <span class="math inline">\(&gt; \alpha\)</span>.</li>
+<li><strong>Resíduos:</strong> antes de usar o modelo, olhe o gráfico Q-Q, os resíduos contra <span class="math inline">\(\hat y\)</span>, o Jarque-Bera e o Durbin-Watson.</li>
+<li><strong>Escala log:</strong> pode corrigir funis e assimetrias. No log-log, <span class="math inline">\(\hat\beta_1\)</span> é a variação percentual de <span class="math inline">\(y\)</span> para 1% a mais em <span class="math inline">\(x\)</span>.</li>
 </ul>
 </div>
 </div>
 <div>
 <div class="caixa exercicio">
 <p><span class="rotulo">Hoje no notebook</span></p>
-<p><strong>Aula_Atividade de regressão múltipla:</strong> o Auto MPG, passos 1 a 4 e exercícios 1 a 6 (backward stepwise, suposições, previsão e gráfico 3D).</p>
-<p>Fazer individual e discutir em grupo.</p>
+<p><strong>Aula27_Atividades (APS 12):</strong> o Auto MPG, passos 1 a 4 e exercícios 1 a 6 (backward stepwise, suposições, previsão e gráfico 3D), com o mesmo grupo do Projeto 3.</p>
 </div>
 <div class="caixa">
 <p><span class="rotulo">Agenda</span></p>
 <ul>
-<li>A <strong>APS 12</strong> fecha hoje (17/11), às 23h59; a <strong>APS 11</strong> fecha em 19/11.</li>
+<li>A <strong>APS 11</strong> fecha em 19/11; a <strong>APS 12</strong>, em <strong>25/11, às 23h59</strong>, um dia antes da avaliação final.</li>
 <li><strong>Aulas 28 (19/11) e 29 (24/11):</strong> estúdio do <strong>Projeto 3</strong>, com entrega em 24/11. O Projeto 3 usa a regressão de hoje.</li>
+<li><strong>Avaliação final:</strong> 26/11.</li>
 </ul>
 </div>
 </div>
@@ -3590,7 +3630,33 @@ column-gap: .35em; row-gap: .1em; margin: .4em 0; font-size: .95em; }
 .bt-ctrl { margin-top: .2em; }
 .bt-ctrl .contas { margin-top: 0; }
 </style>
-    <style type="text/css">.grafico-svg .funil { fill: color-mix(in srgb, var(--marca) 10%, transparent); stroke: var(--marca); stroke-width: 2.5;stroke-dasharray: 8 6; }.grafico-svg .ponto-gap.res { fill: var(--roxo); }.grafico-svg .curva-log { fill: none; stroke: var(--marca); stroke-width: 4; }.grafico-svg .reta.fraca { opacity: .35; stroke-dasharray: 8 6; }.grafico-svg .marco.tq { fill: var(--turquesa); }.grafico-svg .c-tq-svg { fill: var(--turquesa); }#log-painel { font-size: .6em; margin: .5em 0; }#log-painel .log-eq { font-family: "JetBrains Mono", Consolas, monospace; font-weight: 700; color: var(--marca);margin-bottom: .4em; }#log-painel .log-lin { display: flex; justify-content: space-between; border-bottom: 1px solid var(--regua); padding: .2em 0; }#log-painel .log-lin b { color: var(--texto); }.grafico-svg .quadro-par { cursor: pointer; }.grafico-svg .fundo-par { fill: transparent; stroke: var(--regua); stroke-width: 1.5; transition: fill .3s, stroke .3s; }.grafico-svg .quadro-par:hover .fundo-par { stroke: var(--texto-fraco); }.grafico-svg .fundo-par.ativo { fill: color-mix(in srgb, var(--marca) 6%, transparent); stroke: var(--marca); stroke-width: 2.5; }.grafico-svg .ponto-mini { fill: var(--azul); opacity: .4; }.grafico-svg .rotulo-eixo.mini { font-size: 13px; }#pares-info { font-size: .5em; }.grafico-svg.girar { cursor: grab; touch-action: none; }.grafico-svg.girar:active { cursor: grabbing; }.grafico-svg .plano { fill: color-mix(in srgb, var(--marca) 14%, transparent); stroke: var(--marca); stroke-width: 2; }.grafico-svg .grade-plano { stroke: var(--marca); stroke-width: 1; opacity: .45; }.grafico-svg .ponto-3d { fill: var(--azul); opacity: .75; stroke: var(--fundo); stroke-width: 1; }.grafico-svg .ponto-3d:hover { fill: var(--roxo); opacity: 1; }.grafico-svg .reta-ano { stroke: var(--texto-fraco); stroke-width: 2; stroke-dasharray: 6 6; opacity: .7; }.grafico-svg .ponto-gap.do-ano { opacity: 1; fill: var(--laranja); }#ce-contas { font-size: .5em; }.grafico-svg .linha-zero { stroke: var(--texto); stroke-width: 2; stroke-dasharray: 5 5; }.grafico-svg .ic-barra { stroke: var(--marca); stroke-width: 4; }.reveal table.tab-hp { font-size: .55em; border-collapse: collapse; width: 100%; margin: .4em 0 .2em;font-family: "JetBrains Mono", Consolas, monospace; }.reveal .tab-hp th, .reveal .tab-hp td { padding: .3em .5em; text-align: right; border-bottom: 1px solid var(--regua);text-transform: none; letter-spacing: 0; }.reveal .tab-hp td:first-child { text-align: left; }.tab-hp .sig { color: var(--turquesa); font-weight: 800; }.tab-hp .nsig { color: var(--marca); font-weight: 800; }.hp-r2 { font-size: .55em; margin-bottom: .5em; }.grafico-svg .serie-r2 { fill: none; stroke: var(--texto); stroke-width: 3; }.grafico-svg .serie-r2a { fill: none; stroke: var(--turquesa); stroke-width: 3; }.grafico-svg .pt-r2 { fill: var(--texto); stroke: var(--fundo); stroke-width: 2; }.grafico-svg .pt-r2a { fill: var(--turquesa); stroke: var(--fundo); stroke-width: 2; }#r2a-botoes { font-size: .5em; }#r2a-contas { font-size: .5em; }.c-tq { color: var(--turquesa); }.grafico-svg .linha-alfa { stroke: var(--marca); stroke-width: 2.5; stroke-dasharray: 6 5; }.grafico-svg .barra-p { fill: var(--texto-fraco); transition: fill .3s; }.grafico-svg .barra-p.fica { fill: var(--turquesa); }.grafico-svg .barra-p.sai { fill: var(--marca); }#step-leg { font-size: .5em; }.grafico-svg .curva-tend { fill: none; stroke: var(--laranja); stroke-width: 4; }.grafico-svg .media-ano { stroke: var(--laranja); stroke-width: 5; }#supf-modos { font-size: .5em; }#supf-texto { font-size: .6em; }.reveal .codigo-mini pre code { font-size: .5em; }.reveal #sm-log pre.sm-pre, .reveal #sm-mult pre.sm-pre {font-family: "JetBrains Mono", Consolas, monospace; font-size: 13.5px; line-height: 1.4;background: var(--codigo-fundo); color: var(--codigo-texto); padding: .6em .7em; border-radius: 4px;margin: .3em 0 0; white-space: pre; overflow: hidden; box-shadow: none; width: auto; }.eq-termos.eq-menor { font-size: .95em; margin: .2em 0 .5em; }</style>
+    <style type="text/css">.grafico-svg .funil { fill: color-mix(in srgb, var(--marca) 10%, transparent); stroke: var(--marca); stroke-width: 2.5;stroke-dasharray: 8 6; }.grafico-svg .ponto-gap.res { fill: var(--roxo); }.grafico-svg .curva-log { fill: none; stroke: var(--marca); stroke-width: 4; }.grafico-svg .reta.fraca { opacity: .35; stroke-dasharray: 8 6; }.grafico-svg .marco.tq { fill: var(--turquesa); }.grafico-svg .c-tq-svg { fill: var(--turquesa); }#log-painel { font-size: .6em; margin: .5em 0; }#log-painel .log-eq { font-family: "JetBrains Mono", Consolas, monospace; font-weight: 700; color: var(--marca);margin-bottom: .4em; }#log-painel .log-lin { display: flex; justify-content: space-between; border-bottom: 1px solid var(--regua); padding: .2em 0; }#log-painel .log-lin b { color: var(--texto); }.grafico-svg .quadro-par { cursor: pointer; }.grafico-svg .fundo-par { fill: transparent; stroke: var(--regua); stroke-width: 1.5; transition: fill .3s, stroke .3s; }.grafico-svg .quadro-par:hover .fundo-par { stroke: var(--texto-fraco); }.grafico-svg .fundo-par.ativo { fill: color-mix(in srgb, var(--marca) 6%, transparent); stroke: var(--marca); stroke-width: 2.5; }.grafico-svg .ponto-mini { fill: var(--azul); opacity: .4; }.grafico-svg .rotulo-eixo.mini { font-size: 13px; }#pares-info { font-size: .5em; }.grafico-svg.girar { cursor: grab; touch-action: none; }.grafico-svg.girar:active { cursor: grabbing; }.grafico-svg .plano { fill: color-mix(in srgb, var(--marca) 14%, transparent); stroke: var(--marca); stroke-width: 2; }.grafico-svg .grade-plano { stroke: var(--marca); stroke-width: 1; opacity: .45; }.grafico-svg .ponto-3d { fill: var(--azul); opacity: .75; stroke: var(--fundo); stroke-width: 1; }.grafico-svg .ponto-3d:hover { fill: var(--roxo); opacity: 1; }.grafico-svg .reta-ano { stroke: var(--texto-fraco); stroke-width: 2; stroke-dasharray: 6 6; opacity: .7; }.grafico-svg .ponto-gap.do-ano { opacity: 1; fill: var(--laranja); }#ce-contas { font-size: .5em; }.grafico-svg .linha-zero { stroke: var(--texto); stroke-width: 2; stroke-dasharray: 5 5; }.grafico-svg .ic-barra { stroke: var(--marca); stroke-width: 4; }.reveal table.tab-hp { font-size: .55em; border-collapse: collapse; width: 100%; margin: .4em 0 .2em;font-family: "JetBrains Mono", Consolas, monospace; }.reveal .tab-hp th, .reveal .tab-hp td { padding: .3em .5em; text-align: right; border-bottom: 1px solid var(--regua);text-transform: none; letter-spacing: 0; }.reveal .tab-hp td:first-child { text-align: left; }.tab-hp .sig { color: var(--turquesa); font-weight: 800; }.tab-hp .nsig { color: var(--marca); font-weight: 800; }.hp-r2 { font-size: .55em; margin-bottom: .5em; }.grafico-svg .serie-r2 { fill: none; stroke: var(--texto); stroke-width: 3; }.grafico-svg .serie-r2a { fill: none; stroke: var(--turquesa); stroke-width: 3; }.grafico-svg .pt-r2 { fill: var(--texto); stroke: var(--fundo); stroke-width: 2; }.grafico-svg .pt-r2a { fill: var(--turquesa); stroke: var(--fundo); stroke-width: 2; }#r2a-botoes { font-size: .5em; }#r2a-contas { font-size: .5em; }.c-tq { color: var(--turquesa); }.grafico-svg .linha-alfa { stroke: var(--marca); stroke-width: 2.5; stroke-dasharray: 6 5; }.grafico-svg .barra-p { fill: var(--texto-fraco); transition: fill .3s; }.grafico-svg .barra-p.fica { fill: var(--turquesa); }.grafico-svg .barra-p.sai { fill: var(--marca); }#step-leg { font-size: .5em; }.grafico-svg .curva-tend { fill: none; stroke: var(--laranja); stroke-width: 4; }.grafico-svg .media-ano { stroke: var(--laranja); stroke-width: 5; }#supf-modos { font-size: .5em; }#supf-texto { font-size: .6em; }.reveal .codigo-mini pre code { font-size: .5em; }.reveal #sm-log pre.sm-pre, .reveal #sm-mult pre.sm-pre {font-family: "JetBrains Mono", Consolas, monospace; font-size: 13.5px; line-height: 1.4;background: var(--codigo-fundo); color: var(--codigo-texto); padding: .6em .7em; border-radius: 4px;margin: .3em 0 0; white-space: pre; overflow: hidden; box-shadow: none; width: auto; }.eq-termos.eq-menor { font-size: .95em; margin: .2em 0 .5em; }
+.reveal .py-vivo { margin: .2em 0 .4em; }
+.reveal .py-editor {
+display: block; width: 100%; box-sizing: border-box; resize: none;
+font-family: "JetBrains Mono", Consolas, monospace; font-size: 15px; line-height: 1.45;
+background: var(--codigo-fundo); color: var(--codigo-texto);
+border: 2px solid transparent; border-radius: 4px; padding: .5em .7em; tab-size: 4; }
+.reveal .py-editor:focus { outline: none; border-color: var(--marca); }
+.reveal .py-barra { display: flex; align-items: center; gap: .6em; margin: .3em 0; font-size: 15px; }
+.reveal .py-rodar {
+font: inherit; font-weight: 700; cursor: pointer; padding: .25em .9em; border-radius: 4px;
+border: 0; background: var(--marca); color: #fff; }
+.reveal .py-rodar:disabled { opacity: .5; cursor: wait; }
+.reveal .py-status { font-size: 13px; color: #777; }
+.reveal .py-status.pronto { color: #2e7d32; }
+.reveal .py-status.pronto::before { content: "● "; }
+.reveal .py-status.carregando::before { content: "◌ "; }
+.reveal .py-status.erro { color: #c4161c; }
+.reveal pre.py-saida {
+font-family: "JetBrains Mono", Consolas, monospace; font-size: 12.5px; line-height: 1.35;
+background: #f6f6f4; color: #222; font-size: 14.5px; border-left: 3px solid #bbb; border-radius: 3px;
+margin: .2em 0 0; padding: .5em .7em; white-space: pre; overflow: auto; max-height: 470px;
+width: 100%; box-sizing: border-box; box-shadow: none; }
+.reveal pre.py-saida.vazia { color: #999; font-style: italic; font-family: inherit; font-size: 14px; }
+.reveal pre.py-saida.falhou { border-left-color: #c4161c; color: #8a1014; }
+.reveal img.py-fig { display: block; max-width: 100%; max-height: 400px; margin: .3em 0 0; }.reveal .py-saida-menor pre.py-saida { font-size: 11.5px; max-height: 540px; }.reveal img.py-fig[hidden] { display: none; }.reveal .py-saida-media pre.py-saida { font-size: 13.5px; }
+</style>
     <script>/*!
  * GSAP 3.12.5
  * https://gsap.com
@@ -3605,6 +3671,9 @@ column-gap: .35em; row-gap: .1em; margin: .4em 0; font-size: .95em; }
 </script>
     <script>/* gerado por dados27.py: Auto MPG (392 carros) e ajustes da aula 27 */
 window.S27 = {"mpg":[18.0,15.0,18.0,16.0,17.0,15.0,14.0,14.0,14.0,15.0,15.0,14.0,15.0,14.0,24.0,22.0,18.0,21.0,27.0,26.0,25.0,24.0,25.0,26.0,21.0,10.0,10.0,11.0,9.0,27.0,28.0,25.0,19.0,16.0,17.0,19.0,18.0,14.0,14.0,14.0,14.0,12.0,13.0,13.0,18.0,22.0,19.0,18.0,23.0,28.0,30.0,30.0,31.0,35.0,27.0,26.0,24.0,25.0,23.0,20.0,21.0,13.0,14.0,15.0,14.0,17.0,11.0,13.0,12.0,13.0,19.0,15.0,13.0,13.0,14.0,18.0,22.0,21.0,26.0,22.0,28.0,23.0,28.0,27.0,13.0,14.0,13.0,14.0,15.0,12.0,13.0,13.0,14.0,13.0,12.0,13.0,18.0,16.0,18.0,18.0,23.0,26.0,11.0,12.0,13.0,12.0,18.0,20.0,21.0,22.0,18.0,19.0,21.0,26.0,15.0,16.0,29.0,24.0,20.0,19.0,15.0,24.0,20.0,11.0,20.0,19.0,15.0,31.0,26.0,32.0,25.0,16.0,16.0,18.0,16.0,13.0,14.0,14.0,14.0,29.0,26.0,26.0,31.0,32.0,28.0,24.0,26.0,24.0,26.0,31.0,19.0,18.0,15.0,15.0,16.0,15.0,16.0,14.0,17.0,16.0,15.0,18.0,21.0,20.0,13.0,29.0,23.0,20.0,23.0,24.0,25.0,24.0,18.0,29.0,19.0,23.0,23.0,22.0,25.0,33.0,28.0,25.0,25.0,26.0,27.0,17.5,16.0,15.5,14.5,22.0,22.0,24.0,22.5,29.0,24.5,29.0,33.0,20.0,18.0,18.5,17.5,29.5,32.0,28.0,26.5,20.0,13.0,19.0,19.0,16.5,16.5,13.0,13.0,13.0,31.5,30.0,36.0,25.5,33.5,17.5,17.0,15.5,15.0,17.5,20.5,19.0,18.5,16.0,15.5,15.5,16.0,29.0,24.5,26.0,25.5,30.5,33.5,30.0,30.5,22.0,21.5,21.5,43.1,36.1,32.8,39.4,36.1,19.9,19.4,20.2,19.2,20.5,20.2,25.1,20.5,19.4,20.6,20.8,18.6,18.1,19.2,17.7,18.1,17.5,30.0,27.5,27.2,30.9,21.1,23.2,23.8,23.9,20.3,17.0,21.6,16.2,31.5,29.5,21.5,19.8,22.3,20.2,20.6,17.0,17.6,16.5,18.2,16.9,15.5,19.2,18.5,31.9,34.1,35.7,27.4,25.4,23.0,27.2,23.9,34.2,34.5,31.8,37.3,28.4,28.8,26.8,33.5,41.5,38.1,32.1,37.2,28.0,26.4,24.3,19.1,34.3,29.8,31.3,37.0,32.2,46.6,27.9,40.8,44.3,43.4,36.4,30.0,44.6,33.8,29.8,32.7,23.7,35.0,32.4,27.2,26.6,25.8,23.5,30.0,39.1,39.0,35.1,32.3,37.0,37.7,34.1,34.7,34.4,29.9,33.0,33.7,32.4,32.9,31.6,28.1,30.7,25.4,24.2,22.4,26.6,20.2,17.6,28.0,27.0,34.0,31.0,29.0,27.0,24.0,36.0,37.0,31.0,38.0,36.0,36.0,36.0,34.0,38.0,32.0,38.0,25.0,38.0,26.0,22.0,32.0,36.0,27.0,27.0,44.0,32.0,28.0,31.0],"cyl":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,4,6,6,6,4,4,4,4,4,4,6,8,8,8,8,4,4,4,6,6,6,6,6,8,8,8,8,8,8,8,6,4,6,6,4,4,4,4,4,4,4,4,4,4,4,4,4,8,8,8,8,8,8,8,8,8,3,8,8,8,8,4,4,4,4,4,4,4,4,4,8,8,8,8,8,8,8,8,8,8,8,8,6,6,6,6,6,4,8,8,8,8,6,4,4,4,3,4,6,4,8,8,4,4,4,4,8,4,6,8,6,6,6,4,4,4,4,6,6,6,8,8,8,8,8,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,8,8,8,8,6,6,6,6,6,8,8,4,4,6,4,4,4,4,6,4,6,4,4,4,4,4,4,4,4,4,4,8,8,8,8,6,6,6,6,4,4,4,4,6,6,6,6,4,4,4,4,4,8,4,6,6,8,8,8,8,4,4,4,4,4,8,8,8,8,6,6,6,6,8,8,8,8,4,4,4,4,4,4,4,4,6,4,3,4,4,4,4,4,8,8,8,6,6,6,4,6,6,6,6,6,6,8,6,8,8,4,4,4,4,4,4,4,4,5,6,4,6,4,4,6,6,4,6,6,8,8,8,8,8,8,8,8,4,4,4,4,5,8,4,8,4,4,4,4,4,6,6,4,4,4,4,4,4,4,4,6,4,4,4,4,4,4,4,4,4,4,5,4,4,4,4,6,3,4,4,4,4,4,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,8,6,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,4,6,4,4,4,4,4,4,4,4],"disp":[307.0,350.0,318.0,304.0,302.0,429.0,454.0,440.0,455.0,390.0,383.0,340.0,400.0,455.0,113.0,198.0,199.0,200.0,97.0,97.0,110.0,107.0,104.0,121.0,199.0,360.0,307.0,318.0,304.0,97.0,140.0,113.0,232.0,225.0,250.0,250.0,232.0,350.0,400.0,351.0,318.0,383.0,400.0,400.0,258.0,140.0,250.0,250.0,122.0,116.0,79.0,88.0,71.0,72.0,97.0,91.0,113.0,97.5,97.0,140.0,122.0,350.0,400.0,318.0,351.0,304.0,429.0,350.0,350.0,400.0,70.0,304.0,307.0,302.0,318.0,121.0,121.0,120.0,96.0,122.0,97.0,120.0,98.0,97.0,350.0,304.0,350.0,302.0,318.0,429.0,400.0,351.0,318.0,440.0,455.0,360.0,225.0,250.0,232.0,250.0,198.0,97.0,400.0,400.0,360.0,350.0,232.0,97.0,140.0,108.0,70.0,122.0,155.0,98.0,350.0,400.0,68.0,116.0,114.0,121.0,318.0,121.0,156.0,350.0,198.0,232.0,250.0,79.0,122.0,71.0,140.0,250.0,258.0,225.0,302.0,350.0,318.0,302.0,304.0,98.0,79.0,97.0,76.0,83.0,90.0,90.0,116.0,120.0,108.0,79.0,225.0,250.0,250.0,250.0,400.0,350.0,318.0,351.0,231.0,250.0,258.0,225.0,231.0,262.0,302.0,97.0,140.0,232.0,140.0,134.0,90.0,119.0,171.0,90.0,232.0,115.0,120.0,121.0,121.0,91.0,107.0,116.0,140.0,98.0,101.0,305.0,318.0,304.0,351.0,225.0,250.0,200.0,232.0,85.0,98.0,90.0,91.0,225.0,250.0,250.0,258.0,97.0,85.0,97.0,140.0,130.0,318.0,120.0,156.0,168.0,350.0,350.0,302.0,318.0,98.0,111.0,79.0,122.0,85.0,305.0,260.0,318.0,302.0,250.0,231.0,225.0,250.0,400.0,350.0,400.0,351.0,97.0,151.0,97.0,140.0,98.0,98.0,97.0,97.0,146.0,121.0,80.0,90.0,98.0,78.0,85.0,91.0,260.0,318.0,302.0,231.0,200.0,200.0,140.0,225.0,232.0,231.0,200.0,225.0,258.0,305.0,231.0,302.0,318.0,98.0,134.0,119.0,105.0,134.0,156.0,151.0,119.0,131.0,163.0,121.0,163.0,89.0,98.0,231.0,200.0,140.0,232.0,225.0,305.0,302.0,351.0,318.0,350.0,351.0,267.0,360.0,89.0,86.0,98.0,121.0,183.0,350.0,141.0,260.0,105.0,105.0,85.0,91.0,151.0,173.0,173.0,151.0,98.0,89.0,98.0,86.0,151.0,140.0,151.0,225.0,97.0,134.0,120.0,119.0,108.0,86.0,156.0,85.0,90.0,90.0,121.0,146.0,91.0,97.0,89.0,168.0,70.0,122.0,107.0,135.0,151.0,156.0,173.0,135.0,79.0,86.0,81.0,97.0,85.0,89.0,91.0,105.0,98.0,98.0,105.0,107.0,108.0,119.0,120.0,141.0,145.0,168.0,146.0,231.0,350.0,200.0,225.0,112.0,112.0,112.0,112.0,135.0,151.0,140.0,105.0,91.0,91.0,105.0,98.0,120.0,107.0,108.0,91.0,91.0,91.0,181.0,262.0,156.0,232.0,144.0,135.0,151.0,140.0,97.0,135.0,120.0,119.0],"hp":[130,165,150,150,140,198,220,215,225,190,170,160,150,225,95,95,97,85,88,46,87,90,95,113,90,215,200,210,193,88,90,95,100,105,100,88,100,165,175,153,150,180,170,175,110,72,100,88,86,90,70,76,65,69,60,70,95,80,54,90,86,165,175,150,153,150,208,155,160,190,97,150,130,140,150,112,76,87,69,86,92,97,80,88,175,150,145,137,150,198,150,158,150,215,225,175,105,100,100,88,95,46,150,167,170,180,100,88,72,94,90,85,107,90,145,230,49,75,91,112,150,110,122,180,95,100,100,67,80,65,75,100,110,105,140,150,150,140,150,83,67,78,52,61,75,75,75,97,93,67,95,105,72,72,170,145,150,148,110,105,110,95,110,110,129,75,83,100,78,96,71,97,97,70,90,95,88,98,115,53,86,81,92,79,83,140,150,120,152,100,105,81,90,52,60,70,53,100,78,110,95,71,70,75,72,102,150,88,108,120,180,145,130,150,68,80,58,96,70,145,110,145,130,110,105,100,98,180,170,190,149,78,88,75,89,63,83,67,78,97,110,110,48,66,52,70,60,110,140,139,105,95,85,88,100,90,105,85,110,120,145,165,139,140,68,95,97,75,95,105,85,97,103,125,115,133,71,68,115,85,88,90,110,130,129,138,135,155,142,125,150,71,65,80,80,77,125,71,90,70,70,65,69,90,115,115,90,76,60,70,65,90,88,90,90,78,90,75,92,75,65,105,65,48,48,67,67,67,67,62,132,100,88,72,84,84,92,110,84,58,64,60,67,65,62,68,63,65,65,74,75,75,100,74,80,76,116,120,110,105,88,85,88,88,88,85,84,90,92,74,68,68,63,70,88,75,70,67,67,67,110,85,92,112,96,84,90,86,52,84,79,82],"wt":[3504,3693,3436,3433,3449,4341,4354,4312,4425,3850,3563,3609,3761,3086,2372,2833,2774,2587,2130,1835,2672,2430,2375,2234,2648,4615,4376,4382,4732,2130,2264,2228,2634,3439,3329,3302,3288,4209,4464,4154,4096,4955,4746,5140,2962,2408,3282,3139,2220,2123,2074,2065,1773,1613,1834,1955,2278,2126,2254,2408,2226,4274,4385,4135,4129,3672,4633,4502,4456,4422,2330,3892,4098,4294,4077,2933,2511,2979,2189,2395,2288,2506,2164,2100,4100,3672,3988,4042,3777,4952,4464,4363,4237,4735,4951,3821,3121,3278,2945,3021,2904,1950,4997,4906,4654,4499,2789,2279,2401,2379,2124,2310,2472,2265,4082,4278,1867,2158,2582,2868,3399,2660,2807,3664,3102,2901,3336,1950,2451,1836,2542,3781,3632,3613,4141,4699,4457,4638,4257,2219,1963,2300,1649,2003,2125,2108,2246,2489,2391,2000,3264,3459,3432,3158,4668,4440,4498,4657,3907,3897,3730,3785,3039,3221,3169,2171,2639,2914,2592,2702,2223,2545,2984,1937,3211,2694,2957,2945,2671,1795,2464,2220,2572,2255,2202,4215,4190,3962,4215,3233,3353,3012,3085,2035,2164,1937,1795,3651,3574,3645,3193,1825,1990,2155,2565,3150,3940,3270,2930,3820,4380,4055,3870,3755,2045,2155,1825,2300,1945,3880,4060,4140,4295,3520,3425,3630,3525,4220,4165,4325,4335,1940,2740,2265,2755,2051,2075,1985,2190,2815,2600,2720,1985,1800,1985,2070,1800,3365,3735,3570,3535,3155,2965,2720,3430,3210,3380,3070,3620,3410,3425,3445,3205,4080,2155,2560,2300,2230,2515,2745,2855,2405,2830,3140,2795,3410,1990,2135,3245,2990,2890,3265,3360,3840,3725,3955,3830,4360,4054,3605,3940,1925,1975,1915,2670,3530,3900,3190,3420,2200,2150,2020,2130,2670,2595,2700,2556,2144,1968,2120,2019,2678,2870,3003,3381,2188,2711,2542,2434,2265,2110,2800,2110,2085,2335,2950,3250,1850,2145,1845,2910,2420,2500,2290,2490,2635,2620,2725,2385,1755,1875,1760,2065,1975,2050,1985,2215,2045,2380,2190,2210,2350,2615,2635,3230,3160,2900,2930,3415,3725,3060,3465,2605,2640,2395,2575,2525,2735,2865,1980,2025,1970,2125,2125,2160,2205,2245,1965,1965,1995,2945,3015,2585,2835,2665,2370,2950,2790,2130,2295,2625,2720],"acc":[12.0,11.5,11.0,12.0,10.5,10.0,9.0,8.5,10.0,8.5,10.0,8.0,9.5,10.0,15.0,15.5,15.5,16.0,14.5,20.5,17.5,14.5,17.5,12.5,15.0,14.0,15.0,13.5,18.5,14.5,15.5,14.0,13.0,15.5,15.5,15.5,15.5,12.0,11.5,13.5,13.0,11.5,12.0,12.0,13.5,19.0,15.0,14.5,14.0,14.0,19.5,14.5,19.0,18.0,19.0,20.5,15.5,17.0,23.5,19.5,16.5,12.0,12.0,13.5,13.0,11.5,11.0,13.5,13.5,12.5,13.5,12.5,14.0,16.0,14.0,14.5,18.0,19.5,18.0,16.0,17.0,14.5,15.0,16.5,13.0,11.5,13.0,14.5,12.5,11.5,12.0,13.0,14.5,11.0,11.0,11.0,16.5,18.0,16.0,16.5,16.0,21.0,14.0,12.5,13.0,12.5,15.0,19.0,19.5,16.5,13.5,18.5,14.0,15.5,13.0,9.5,19.5,15.5,14.0,15.5,11.0,14.0,13.5,11.0,16.5,16.0,17.0,19.0,16.5,21.0,17.0,17.0,18.0,16.5,14.0,14.5,13.5,16.0,15.5,16.5,15.5,14.5,16.5,19.0,14.5,15.5,14.0,15.0,15.5,16.0,16.0,16.0,21.0,19.5,11.5,14.0,14.5,13.5,21.0,18.5,19.0,19.0,15.0,13.5,12.0,16.0,17.0,16.0,18.5,13.5,16.5,17.0,14.5,14.0,17.0,15.0,17.0,14.5,13.5,17.5,15.5,16.9,14.9,17.7,15.3,13.0,13.0,13.9,12.8,15.4,14.5,17.6,17.6,22.2,22.1,14.2,17.4,17.7,21.0,16.2,17.8,12.2,17.0,16.4,13.6,15.7,13.2,21.9,15.5,16.7,12.1,12.0,15.0,14.0,18.5,14.8,18.6,15.5,16.8,12.5,19.0,13.7,14.9,16.4,16.9,17.7,19.0,11.1,11.4,12.2,14.5,14.5,16.0,18.2,15.8,17.0,15.9,16.4,14.1,14.5,12.8,13.5,21.5,14.4,19.4,18.6,16.4,15.5,13.2,12.8,19.2,18.2,15.8,15.4,17.2,17.2,15.8,16.7,18.7,15.1,13.2,13.4,11.2,13.7,16.5,14.2,14.7,14.5,14.8,16.7,17.6,14.9,15.9,13.6,15.7,15.8,14.9,16.6,15.4,18.2,17.3,18.2,16.6,15.4,13.4,13.2,15.2,14.9,14.3,15.0,13.0,14.0,15.2,14.4,15.0,20.1,17.4,24.8,22.2,13.2,14.9,19.2,14.7,16.0,11.3,12.9,13.2,14.7,18.8,15.5,16.4,16.5,18.1,20.1,18.7,15.8,15.5,17.5,15.0,15.2,17.9,14.4,19.2,21.7,23.7,19.9,21.8,13.8,18.0,15.3,11.4,12.5,15.1,17.0,15.7,16.4,14.4,12.6,12.9,16.9,16.4,16.1,17.8,19.4,17.3,16.0,14.9,16.2,20.7,14.2,14.4,16.8,14.8,18.3,20.4,19.6,12.6,13.8,15.8,19.0,17.1,16.6,19.6,18.6,18.0,16.2,16.0,18.0,16.4,15.3,18.2,17.6,14.7,17.3,14.5,14.5,16.9,15.0,15.7,16.2,16.4,17.0,14.5,14.7,13.9,13.0,17.3,15.6,24.6,11.6,18.6,19.4],"ano":[70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,74,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,75,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,76,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,79,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,80,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,81,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82,82],"nome":["chevrolet chevelle malibu","buick skylark 320","plymouth satellite","amc rebel sst","ford torino","ford galaxie 500","chevrolet impala","plymouth fury iii","pontiac catalina","amc ambassador dpl","dodge challenger se","plymouth 'cuda 340","chevrolet monte carlo","buick estate wagon (sw)","toyota corona mark ii","plymouth duster","amc hornet","ford maverick","datsun pl510","volkswagen 1131 deluxe sedan","peugeot 504","audi 100 ls","saab 99e","bmw 2002","amc gremlin","ford f250","chevy c20","dodge d200","hi 1200d","datsun pl510","chevrolet vega 2300","toyota corona","amc gremlin","plymouth satellite custom","chevrolet chevelle malibu","ford torino 500","amc matador","chevrolet impala","pontiac catalina brougham","ford galaxie 500","plymouth fury iii","dodge monaco (sw)","ford country squire (sw)","pontiac safari (sw)","amc hornet sportabout (sw)","chevrolet vega (sw)","pontiac firebird","ford mustang","mercury capri 2000","opel 1900","peugeot 304","fiat 124b","toyota corolla 1200","datsun 1200","volkswagen model 111","plymouth cricket","toyota corona hardtop","dodge colt hardtop","volkswagen type 3","chevrolet vega","ford pinto runabout","chevrolet impala","pontiac catalina","plymouth fury iii","ford galaxie 500","amc ambassador sst","mercury marquis","buick lesabre custom","oldsmobile delta 88 royale","chrysler newport royal","mazda rx2 coupe","amc matador (sw)","chevrolet chevelle concours (sw)","ford gran torino (sw)","plymouth satellite custom (sw)","volvo 145e (sw)","volkswagen 411 (sw)","peugeot 504 (sw)","renault 12 (sw)","ford pinto (sw)","datsun 510 (sw)","toyouta corona mark ii (sw)","dodge colt (sw)","toyota corolla 1600 (sw)","buick century 350","amc matador","chevrolet malibu","ford gran torino","dodge coronet custom","mercury marquis brougham","chevrolet caprice classic","ford ltd","plymouth fury gran sedan","chrysler new yorker brougham","buick electra 225 custom","amc ambassador brougham","plymouth valiant","chevrolet nova custom","amc hornet","ford maverick","plymouth duster","volkswagen super beetle","chevrolet impala","ford country","plymouth custom suburb","oldsmobile vista cruiser","amc gremlin","toyota carina","chevrolet vega","datsun 610","maxda rx3","ford pinto","mercury capri v6","fiat 124 sport coupe","chevrolet monte carlo s","pontiac grand prix","fiat 128","opel manta","audi 100ls","volvo 144ea","dodge dart custom","saab 99le","toyota mark ii","oldsmobile omega","plymouth duster","amc hornet","chevrolet nova","datsun b210","ford pinto","toyota corolla 1200","chevrolet vega","chevrolet chevelle malibu classic","amc matador","plymouth satellite sebring","ford gran torino","buick century luxus (sw)","dodge coronet custom (sw)","ford gran torino (sw)","amc matador (sw)","audi fox","volkswagen dasher","opel manta","toyota corona","datsun 710","dodge colt","fiat 128","fiat 124 tc","honda civic","subaru","fiat x1.9","plymouth valiant custom","chevrolet nova","mercury monarch","ford maverick","pontiac catalina","chevrolet bel air","plymouth grand fury","ford ltd","buick century","chevroelt chevelle malibu","amc matador","plymouth fury","buick skyhawk","chevrolet monza 2+2","ford mustang ii","toyota corolla","ford pinto","amc gremlin","pontiac astro","toyota corona","volkswagen dasher","datsun 710","ford pinto","volkswagen rabbit","amc pacer","audi 100ls","peugeot 504","volvo 244dl","saab 99le","honda civic cvcc","fiat 131","opel 1900","capri ii","dodge colt","renault 12tl","chevrolet chevelle malibu classic","dodge coronet brougham","amc matador","ford gran torino","plymouth valiant","chevrolet nova","ford maverick","amc hornet","chevrolet chevette","chevrolet woody","vw rabbit","honda civic","dodge aspen se","ford granada ghia","pontiac ventura sj","amc pacer d/l","volkswagen rabbit","datsun b-210","toyota corolla","ford pinto","volvo 245","plymouth volare premier v8","peugeot 504","toyota mark ii","mercedes-benz 280s","cadillac seville","chevy c10","ford f108","dodge d100","honda accord cvcc","buick opel isuzu deluxe","renault 5 gtl","plymouth arrow gs","datsun f-10 hatchback","chevrolet caprice classic","oldsmobile cutlass supreme","dodge monaco brougham","mercury cougar brougham","chevrolet concours","buick skylark","plymouth volare custom","ford granada","pontiac grand prix lj","chevrolet monte carlo landau","chrysler cordoba","ford thunderbird","volkswagen rabbit custom","pontiac sunbird coupe","toyota corolla liftback","ford mustang ii 2+2","chevrolet chevette","dodge colt m/m","subaru dl","volkswagen dasher","datsun 810","bmw 320i","mazda rx-4","volkswagen rabbit custom diesel","ford fiesta","mazda glc deluxe","datsun b210 gx","honda civic cvcc","oldsmobile cutlass salon brougham","dodge diplomat","mercury monarch ghia","pontiac phoenix lj","chevrolet malibu","ford fairmont (auto)","ford fairmont (man)","plymouth volare","amc concord","buick century special","mercury zephyr","dodge aspen","amc concord d/l","chevrolet monte carlo landau","buick regal sport coupe (turbo)","ford futura","dodge magnum xe","chevrolet chevette","toyota corona","datsun 510","dodge omni","toyota celica gt liftback","plymouth sapporo","oldsmobile starfire sx","datsun 200-sx","audi 5000","volvo 264gl","saab 99gle","peugeot 604sl","volkswagen scirocco","honda accord lx","pontiac lemans v6","mercury zephyr 6","ford fairmont 4","amc concord dl 6","dodge aspen 6","chevrolet caprice classic","ford ltd landau","mercury grand marquis","dodge st. regis","buick estate wagon (sw)","ford country squire (sw)","chevrolet malibu classic (sw)","chrysler lebaron town @ country (sw)","vw rabbit custom","maxda glc deluxe","dodge colt hatchback custom","amc spirit dl","mercedes benz 300d","cadillac eldorado","peugeot 504","oldsmobile cutlass salon brougham","plymouth horizon","plymouth horizon tc3","datsun 210","fiat strada custom","buick skylark limited","chevrolet citation","oldsmobile omega brougham","pontiac phoenix","vw rabbit","toyota corolla tercel","chevrolet chevette","datsun 310","chevrolet citation","ford fairmont","amc concord","dodge aspen","audi 4000","toyota corona liftback","mazda 626","datsun 510 hatchback","toyota corolla","mazda glc","dodge colt","datsun 210","vw rabbit c (diesel)","vw dasher (diesel)","audi 5000s (diesel)","mercedes-benz 240d","honda civic 1500 gl","subaru dl","vokswagen rabbit","datsun 280-zx","mazda rx-7 gs","triumph tr7 coupe","honda accord","plymouth reliant","buick skylark","dodge aries wagon (sw)","chevrolet citation","plymouth reliant","toyota starlet","plymouth champ","honda civic 1300","subaru","datsun 210 mpg","toyota tercel","mazda glc 4","plymouth horizon 4","ford escort 4w","ford escort 2h","volkswagen jetta","honda prelude","toyota corolla","datsun 200sx","mazda 626","peugeot 505s turbo diesel","volvo diesel","toyota cressida","datsun 810 maxima","buick century","oldsmobile cutlass ls","ford granada gl","chrysler lebaron salon","chevrolet cavalier","chevrolet cavalier wagon","chevrolet cavalier 2-door","pontiac j2000 se hatchback","dodge aries se","pontiac phoenix","ford fairmont futura","volkswagen rabbit l","mazda glc custom l","mazda glc custom","plymouth horizon miser","mercury lynx l","nissan stanza xe","honda accord","toyota corolla","honda civic","honda civic (auto)","datsun 310 gx","buick century limited","oldsmobile cutlass ciera (diesel)","chrysler lebaron medallion","ford granada l","toyota celica gt","dodge charger 2.2","chevrolet camaro","ford mustang gl","vw pickup","dodge rampage","ford ranger","chevy s-10"],"passos":[{"vars":["cylinders","displacement","horsepower","weight","acceleration","model year"],"coef":{"const":-14.535250480506374,"cylinders":-0.3298590890739055,"displacement":0.007678430243918049,"horsepower":-0.00039135557376076754,"weight":-0.006794617913375048,"acceleration":0.08527324694722893,"model year":0.7533671797501007},"se":{"const":4.763881893953779,"cylinders":0.3321041331748703,"displacement":0.007357736140543882,"horsepower":0.013836521487403877,"weight":0.0006700226948457844,"acceleration":0.10203556702631941,"model year":0.052618148006331106},"t":{"const":-3.051135776257219,"cylinders":-0.9932399392940325,"displacement":1.0435859749858414,"horsepower":-0.02828424572729782,"weight":-10.140877265267752,"acceleration":0.8357208121873155,"model year":14.317630100919825},"p":{"const":0.002437741083865007,"cylinders":0.32121686784161896,"displacement":0.2973318048889745,"horsepower":0.9774501010042538,"weight":1.4161898893529445e-21,"acceleration":0.40383033028431403,"model year":1.4104275872678224e-37},"lo":{"const":-23.901732164825503,"cylinders":-0.9828239085034286,"displacement":-0.006787944517791324,"horsepower":-0.02759596055167627,"weight":-0.008111979560672862,"acceleration":-0.1153434540910799,"model year":0.6499122808808393},"hi":{"const":-5.168768796187244,"cylinders":0.3231057303556176,"displacement":0.022144805005627422,"horsepower":0.026813249404154735,"weight":-0.005477256266077233,"acceleration":0.2858899479855378,"model year":0.8568220786193621},"r2":0.8092552890383932,"r2a":0.8062826441922383,"F":272.23409822574587,"pF":3.792336100722653e-135},{"vars":["cylinders","displacement","weight","acceleration","model year"],"coef":{"const":-14.600621005490805,"cylinders":-0.32889433825990533,"displacement":0.007628998156031928,"weight":-0.006803080618560128,"acceleration":0.08710104021042653,"model year":0.7537042316548901},"se":{"const":4.1602895727214,"cylinders":0.3299200352985933,"displacement":0.007137901015095764,"weight":0.0005987304576892293,"acceleration":0.07886110355859904,"model year":0.05118461560247231},"t":{"const":-3.509520371184162,"cylinders":-0.9968910738089619,"displacement":1.0688013380820993,"weight":-11.362509675583038,"acceleration":1.1044867023158593,"model year":14.725210354387906},"p":{"const":0.0005018827025436081,"cylinders":0.3194418960435504,"displacement":0.28582712385096526,"weight":5.257232314531021e-26,"acceleration":0.2700700738334557,"model year":2.8968145821881912e-39},"lo":{"const":-22.780285954780286,"cylinders":-0.9775596058160227,"displacement":-0.006405034265053707,"weight":-0.007980261786655852,"acceleration":-0.06795004298102655,"model year":0.6530686872130813},"hi":{"const":-6.420956056201323,"cylinders":0.3197709292962121,"displacement":0.021663030577117562,"weight":-0.005625899450464404,"acceleration":0.2421521234018796,"model year":0.8543397760966989},"r2":0.8092548926864622,"r2a":0.80678410114095,"F":327.52859874252147,"pF":1.9921921483866788e-136},{"vars":["displacement","weight","acceleration","model year"],"coef":{"const":-15.270033690478945,"displacement":0.0028741828475982723,"weight":-0.006852094888742728,"acceleration":0.08554726124825052,"model year":0.7532331579150264},"se":{"const":4.105706542989373,"displacement":0.005310336782363469,"weight":0.0005967034797178898,"acceleration":0.07884506717271693,"model year":0.051182023736857006},"t":{"const":-3.719221900199619,"displacement":0.5412430445360682,"weight":-11.483249422279671,"acceleration":1.085004608606038,"model year":14.716752150865247},"p":{"const":0.00022938398937577014,"displacement":0.5886514933385557,"weight":1.8242999794648987e-26,"acceleration":0.2785950410904973,"model year":3.0052382765528085e-39},"lo":{"const":-23.342315771795292,"displacement":-0.00756653813554743,"weight":-0.008025281222629792,"acceleration":-0.06947103250323111,"model year":0.6526035272362299},"hi":{"const":-7.197751609162596,"displacement":0.013314903830743975,"weight":-0.005678908554855664,"acceleration":0.24056555499973215,"model year":0.8538627885938229},"r2":0.8087638022045305,"r2a":0.8067872006769288,"F":409.16886429093216,"pF":1.5173416703415196e-137},{"vars":["weight","acceleration","model year"],"coef":{"const":-14.936555253243954,"weight":-0.006554125901812532,"acceleration":0.06635931599210818,"model year":0.7484460243962139},"se":{"const":4.055512064482479,"weight":0.0002299529755450249,"acceleration":0.07036113111362621,"model year":0.05036605637073257},"t":{"const":-3.6830257229551595,"weight":-28.502026930846263,"acceleration":0.9431246334704951,"model year":14.860127600364034},"p":{"const":0.00026317501199169994,"weight":3.451653726311016e-97,"acceleration":0.34620402865527955,"model year":7.37172186585627e-40},"lo":{"const":-22.91008486247294,"weight":-0.007006235729150091,"acceleration":-0.07197748423263325,"model year":0.6494214782016067},"hi":{"const":-6.9630256440149685,"weight":-0.006102016074474972,"acceleration":0.2046961162168496,"model year":0.8474705705908211},"r2":0.8086190437986203,"r2a":0.8071392941372694,"F":546.4566506880809,"pF":6.913229540418901e-139},{"vars":["weight","model year"],"coef":{"const":-14.347253017615689,"weight":-0.006632075291836657,"model year":0.7573182809735387},"se":{"const":4.00651856306903,"weight":0.00021455591793656127,"model year":0.049472687259734215},"t":{"const":-3.5809775474060355,"weight":-30.91070782674749,"model year":15.307805638241922},"p":{"const":0.0003856623584505212,"weight":8.361624441030958e-107,"model year":9.772260160046487e-42},"lo":{"const":-22.224393297217006,"weight":-0.007053909619270871,"model year":0.6600509673646745},"hi":{"const":-6.470112738014373,"weight":-0.006210240964402442,"model year":0.8545855945824029},"r2":0.8081803058793997,"r2a":0.8071940863723529,"F":819.4730484488967,"pF":3.3321631451383913e-140}],"fim":{"coef":{"const":-14.347253017615689,"weight":-0.006632075291836657,"model year":0.7573182809735387},"se":{"const":4.00651856306903,"weight":0.00021455591793656127,"model year":0.049472687259734215},"t":{"const":-3.5809775474060355,"weight":-30.91070782674749,"model year":15.307805638241922},"p":{"const":0.0003856623584505212,"weight":8.361624441030958e-107,"model year":9.772260160046487e-42},"lo":{"const":-22.224393297217006,"weight":-0.007053909619270871,"model year":0.6600509673646745},"hi":{"const":-6.470112738014373,"weight":-0.006210240964402442,"model year":0.8545855945824029},"r2":0.8081803058793997,"r2a":0.8071940863723529,"F":819.4730484488967,"pF":3.3321631451383913e-140},"hpS":{"coef":{"const":39.93586102117049,"horsepower":-0.15784473335365368},"se":{"const":0.717498655554527,"horsepower":0.006445500517685038},"t":{"const":55.659840909814115,"horsepower":-24.489135160343622},"p":{"const":1.2203615961050493e-187,"horsepower":7.031989029404463e-81},"lo":{"const":38.52521178922964,"horsepower":-0.17051700846435702},"hi":{"const":41.34651025311134,"horsepower":-0.14517245824295033},"r2":0.6059482578894348,"r2a":0.6049378688071001,"F":599.7177409015786,"pF":7.031989029403965e-81},"resFim":[2.5738,0.8272,2.1228,0.1029,1.209,5.1248,4.211,3.9325,4.6819,1.8685,-0.0349,-0.7299,1.2782,-4.1984,1.0663,2.1236,-2.2676,-0.5078,2.4613,-0.4952,4.0559,1.4509,2.0862,2.151,-0.1033,1.942,0.3569,1.3967,1.718,1.704,3.5927,0.3539,-2.9535,-0.6146,-0.3442,1.4768,0.3839,2.4921,4.1832,2.1273,1.7426,5.4396,5.0535,7.6665,-1.7781,-1.4523,1.3441,-0.6043,-1.6991,2.6576,4.3326,4.2729,3.3363,6.2752,-0.2591,-0.4566,-1.0718,-1.0799,-2.231,-4.2096,-4.4167,1.1658,2.902,2.244,1.2042,1.1733,1.5467,2.6779,1.3729,2.1474,-5.7269,0.6324,-0.0014,1.2985,0.8593,-2.7278,-1.5265,0.5773,0.3379,-2.2958,2.9945,-0.5597,2.1721,0.7477,-0.7455,-2.584,-1.4883,-0.1301,-0.8876,3.9051,1.6686,0.9988,1.1631,3.4659,3.8984,-2.5958,-2.2383,-3.197,-3.4055,-2.9015,1.3226,-2.0044,3.2035,3.6,2.9287,0.9007,-4.4401,-5.8225,-4.0134,-3.1593,-8.8505,-6.6169,-3.5425,0.0847,1.1351,3.435,0.4451,-2.625,-3.813,-2.9162,-3.3946,0.7043,-2.3207,-5.6371,-1.1216,-3.4546,-4.5697,2.2382,0.5609,2.4822,0.1644,-0.6184,-1.6066,0.2674,1.7691,2.4698,1.8649,3.0653,0.5384,2.0223,-2.6755,-0.4405,0.242,3.5897,0.3989,-3.7139,-0.7987,-1.1871,0.163,2.5699,-1.8045,-1.5113,-4.6903,-6.5075,4.5069,1.9948,3.3795,2.434,0.4599,-0.6064,-2.714,0.6508,-1.2967,-1.0897,-8.4346,0.9466,-1.9496,-3.1258,-2.2613,-0.5318,-2.7085,-1.573,-4.6615,-0.6053,-2.156,-1.5848,0.1594,-0.9202,0.2627,2.453,1.1325,-3.4857,-1.1512,-2.2536,-1.6051,2.2453,0.5795,-1.4327,-0.7547,0.2326,1.0284,0.7669,-0.249,-0.7127,-4.3571,-1.3626,1.6956,1.0048,-1.5059,-0.535,-4.5327,-1.6054,1.9889,-0.9168,0.3023,-2.3179,-4.0786,-2.5221,-4.777,-1.3744,2.3396,-3.3159,-4.5428,-5.3055,1.0963,0.3259,4.1373,-3.2125,2.4331,-0.7338,-0.04,-1.0095,-0.4815,-3.1213,-0.7514,-0.8918,-2.0882,0.0211,-0.8437,0.2175,0.7838,-2.1,-1.2944,-2.9446,-0.1949,0.1361,3.2953,-0.8016,1.058,-3.297,-5.2229,-4.427,11.5411,3.3142,1.2411,8.4048,3.3142,-2.5066,-0.5528,-0.8471,-2.0792,-3.2994,-4.8595,-1.5843,-1.4756,-4.0346,-1.7072,-3.5631,-2.1155,-4.0082,-2.8087,-4.1761,-5.3678,-0.1647,-0.4315,-0.2455,-2.2698,0.966,-6.9439,-3.3185,-1.989,-4.8734,-5.6548,-6.8989,-4.5869,-5.9082,-0.0257,-1.0641,-2.4598,-5.851,-4.0142,-3.6272,-2.5971,-3.0137,-3.1764,-2.751,-1.88,0.335,-3.0945,-2.3723,-0.8505,-0.8141,1.7175,2.9195,-0.3733,3.3303,3.3842,2.8754,1.1008,3.3097,3.2781,-0.2841,5.9454,0.6267,0.5293,-0.7743,4.9707,9.481,4.9137,-0.0782,4.352,-0.4775,-0.8042,-2.0221,-4.7152,2.5728,1.5413,1.9205,6.9043,0.9834,14.3555,0.2316,8.5555,11.8897,12.6477,9.7264,5.316,10.6311,1.7876,-4.202,5.7611,-6.4886,5.342,1.3492,-3.2817,-2.92,-3.8195,-5.4231,-1.178,3.7438,4.4396,-0.2231,-1.0003,3.1028,4.3002,0.2691,2.3945,0.9671,-1.3112,0.5287,1.3614,0.9898,3.2473,2.08,2.5261,4.6618,-2.3625,-3.3635,-1.947,4.309,-6.5014,-6.4154,-2.4763,-3.2442,2.131,0.3247,-2.0069,-2.6141,-4.752,1.3787,2.6771,-3.6877,4.3403,2.3403,2.5724,2.8709,1.1362,3.2792,-2.7208,3.4781,-3.2214,10.2429,-4.6089,-6.9509,1.9216,3.9652,-1.1882,-2.2494,10.3735,-0.5322,-2.3436,1.2864]};
+</script>
+    <script>/* auto_mpg_sub.csv do notebook da APS 12, para o Python no navegador */
+window.S27_CSV = "mpg,cylinders,displacement,horsepower,weight,acceleration,model year,origin,car name\n18.0,8,307.0,130,3504,12.0,70,1,chevrolet chevelle malibu\n15.0,8,350.0,165,3693,11.5,70,1,buick skylark 320\n18.0,8,318.0,150,3436,11.0,70,1,plymouth satellite\n16.0,8,304.0,150,3433,12.0,70,1,amc rebel sst\n17.0,8,302.0,140,3449,10.5,70,1,ford torino\n15.0,8,429.0,198,4341,10.0,70,1,ford galaxie 500\n14.0,8,454.0,220,4354,9.0,70,1,chevrolet impala\n14.0,8,440.0,215,4312,8.5,70,1,plymouth fury iii\n14.0,8,455.0,225,4425,10.0,70,1,pontiac catalina\n15.0,8,390.0,190,3850,8.5,70,1,amc ambassador dpl\n15.0,8,383.0,170,3563,10.0,70,1,dodge challenger se\n14.0,8,340.0,160,3609,8.0,70,1,plymouth 'cuda 340\n15.0,8,400.0,150,3761,9.5,70,1,chevrolet monte carlo\n14.0,8,455.0,225,3086,10.0,70,1,buick estate wagon (sw)\n24.0,4,113.0,95,2372,15.0,70,3,toyota corona mark ii\n22.0,6,198.0,95,2833,15.5,70,1,plymouth duster\n18.0,6,199.0,97,2774,15.5,70,1,amc hornet\n21.0,6,200.0,85,2587,16.0,70,1,ford maverick\n27.0,4,97.0,88,2130,14.5,70,3,datsun pl510\n26.0,4,97.0,46,1835,20.5,70,2,volkswagen 1131 deluxe sedan\n25.0,4,110.0,87,2672,17.5,70,2,peugeot 504\n24.0,4,107.0,90,2430,14.5,70,2,audi 100 ls\n25.0,4,104.0,95,2375,17.5,70,2,saab 99e\n26.0,4,121.0,113,2234,12.5,70,2,bmw 2002\n21.0,6,199.0,90,2648,15.0,70,1,amc gremlin\n10.0,8,360.0,215,4615,14.0,70,1,ford f250\n10.0,8,307.0,200,4376,15.0,70,1,chevy c20\n11.0,8,318.0,210,4382,13.5,70,1,dodge d200\n9.0,8,304.0,193,4732,18.5,70,1,hi 1200d\n27.0,4,97.0,88,2130,14.5,71,3,datsun pl510\n28.0,4,140.0,90,2264,15.5,71,1,chevrolet vega 2300\n25.0,4,113.0,95,2228,14.0,71,3,toyota corona\n19.0,6,232.0,100,2634,13.0,71,1,amc gremlin\n16.0,6,225.0,105,3439,15.5,71,1,plymouth satellite custom\n17.0,6,250.0,100,3329,15.5,71,1,chevrolet chevelle malibu\n19.0,6,250.0,88,3302,15.5,71,1,ford torino 500\n18.0,6,232.0,100,3288,15.5,71,1,amc matador\n14.0,8,350.0,165,4209,12.0,71,1,chevrolet impala\n14.0,8,400.0,175,4464,11.5,71,1,pontiac catalina brougham\n14.0,8,351.0,153,4154,13.5,71,1,ford galaxie 500\n14.0,8,318.0,150,4096,13.0,71,1,plymouth fury iii\n12.0,8,383.0,180,4955,11.5,71,1,dodge monaco (sw)\n13.0,8,400.0,170,4746,12.0,71,1,ford country squire (sw)\n13.0,8,400.0,175,5140,12.0,71,1,pontiac safari (sw)\n18.0,6,258.0,110,2962,13.5,71,1,amc hornet sportabout (sw)\n22.0,4,140.0,72,2408,19.0,71,1,chevrolet vega (sw)\n19.0,6,250.0,100,3282,15.0,71,1,pontiac firebird\n18.0,6,250.0,88,3139,14.5,71,1,ford mustang\n23.0,4,122.0,86,2220,14.0,71,1,mercury capri 2000\n28.0,4,116.0,90,2123,14.0,71,2,opel 1900\n30.0,4,79.0,70,2074,19.5,71,2,peugeot 304\n30.0,4,88.0,76,2065,14.5,71,2,fiat 124b\n31.0,4,71.0,65,1773,19.0,71,3,toyota corolla 1200\n35.0,4,72.0,69,1613,18.0,71,3,datsun 1200\n27.0,4,97.0,60,1834,19.0,71,2,volkswagen model 111\n26.0,4,91.0,70,1955,20.5,71,1,plymouth cricket\n24.0,4,113.0,95,2278,15.5,72,3,toyota corona hardtop\n25.0,4,97.5,80,2126,17.0,72,1,dodge colt hardtop\n23.0,4,97.0,54,2254,23.5,72,2,volkswagen type 3\n20.0,4,140.0,90,2408,19.5,72,1,chevrolet vega\n21.0,4,122.0,86,2226,16.5,72,1,ford pinto runabout\n13.0,8,350.0,165,4274,12.0,72,1,chevrolet impala\n14.0,8,400.0,175,4385,12.0,72,1,pontiac catalina\n15.0,8,318.0,150,4135,13.5,72,1,plymouth fury iii\n14.0,8,351.0,153,4129,13.0,72,1,ford galaxie 500\n17.0,8,304.0,150,3672,11.5,72,1,amc ambassador sst\n11.0,8,429.0,208,4633,11.0,72,1,mercury marquis\n13.0,8,350.0,155,4502,13.5,72,1,buick lesabre custom\n12.0,8,350.0,160,4456,13.5,72,1,oldsmobile delta 88 royale\n13.0,8,400.0,190,4422,12.5,72,1,chrysler newport royal\n19.0,3,70.0,97,2330,13.5,72,3,mazda rx2 coupe\n15.0,8,304.0,150,3892,12.5,72,1,amc matador (sw)\n13.0,8,307.0,130,4098,14.0,72,1,chevrolet chevelle concours (sw)\n13.0,8,302.0,140,4294,16.0,72,1,ford gran torino (sw)\n14.0,8,318.0,150,4077,14.0,72,1,plymouth satellite custom (sw)\n18.0,4,121.0,112,2933,14.5,72,2,volvo 145e (sw)\n22.0,4,121.0,76,2511,18.0,72,2,volkswagen 411 (sw)\n21.0,4,120.0,87,2979,19.5,72,2,peugeot 504 (sw)\n26.0,4,96.0,69,2189,18.0,72,2,renault 12 (sw)\n22.0,4,122.0,86,2395,16.0,72,1,ford pinto (sw)\n28.0,4,97.0,92,2288,17.0,72,3,datsun 510 (sw)\n23.0,4,120.0,97,2506,14.5,72,3,toyouta corona mark ii (sw)\n28.0,4,98.0,80,2164,15.0,72,1,dodge colt (sw)\n27.0,4,97.0,88,2100,16.5,72,3,toyota corolla 1600 (sw)\n13.0,8,350.0,175,4100,13.0,73,1,buick century 350\n14.0,8,304.0,150,3672,11.5,73,1,amc matador\n13.0,8,350.0,145,3988,13.0,73,1,chevrolet malibu\n14.0,8,302.0,137,4042,14.5,73,1,ford gran torino\n15.0,8,318.0,150,3777,12.5,73,1,dodge coronet custom\n12.0,8,429.0,198,4952,11.5,73,1,mercury marquis brougham\n13.0,8,400.0,150,4464,12.0,73,1,chevrolet caprice classic\n13.0,8,351.0,158,4363,13.0,73,1,ford ltd\n14.0,8,318.0,150,4237,14.5,73,1,plymouth fury gran sedan\n13.0,8,440.0,215,4735,11.0,73,1,chrysler new yorker brougham\n12.0,8,455.0,225,4951,11.0,73,1,buick electra 225 custom\n13.0,8,360.0,175,3821,11.0,73,1,amc ambassador brougham\n18.0,6,225.0,105,3121,16.5,73,1,plymouth valiant\n16.0,6,250.0,100,3278,18.0,73,1,chevrolet nova custom\n18.0,6,232.0,100,2945,16.0,73,1,amc hornet\n18.0,6,250.0,88,3021,16.5,73,1,ford maverick\n23.0,6,198.0,95,2904,16.0,73,1,plymouth duster\n26.0,4,97.0,46,1950,21.0,73,2,volkswagen super beetle\n11.0,8,400.0,150,4997,14.0,73,1,chevrolet impala\n12.0,8,400.0,167,4906,12.5,73,1,ford country\n13.0,8,360.0,170,4654,13.0,73,1,plymouth custom suburb\n12.0,8,350.0,180,4499,12.5,73,1,oldsmobile vista cruiser\n18.0,6,232.0,100,2789,15.0,73,1,amc gremlin\n20.0,4,97.0,88,2279,19.0,73,3,toyota carina\n21.0,4,140.0,72,2401,19.5,73,1,chevrolet vega\n22.0,4,108.0,94,2379,16.5,73,3,datsun 610\n18.0,3,70.0,90,2124,13.5,73,3,maxda rx3\n19.0,4,122.0,85,2310,18.5,73,1,ford pinto\n21.0,6,155.0,107,2472,14.0,73,1,mercury capri v6\n26.0,4,98.0,90,2265,15.5,73,2,fiat 124 sport coupe\n15.0,8,350.0,145,4082,13.0,73,1,chevrolet monte carlo s\n16.0,8,400.0,230,4278,9.5,73,1,pontiac grand prix\n29.0,4,68.0,49,1867,19.5,73,2,fiat 128\n24.0,4,116.0,75,2158,15.5,73,2,opel manta\n20.0,4,114.0,91,2582,14.0,73,2,audi 100ls\n19.0,4,121.0,112,2868,15.5,73,2,volvo 144ea\n15.0,8,318.0,150,3399,11.0,73,1,dodge dart custom\n24.0,4,121.0,110,2660,14.0,73,2,saab 99le\n20.0,6,156.0,122,2807,13.5,73,3,toyota mark ii\n11.0,8,350.0,180,3664,11.0,73,1,oldsmobile omega\n20.0,6,198.0,95,3102,16.5,74,1,plymouth duster\n19.0,6,232.0,100,2901,16.0,74,1,amc hornet\n15.0,6,250.0,100,3336,17.0,74,1,chevrolet nova\n31.0,4,79.0,67,1950,19.0,74,3,datsun b210\n26.0,4,122.0,80,2451,16.5,74,1,ford pinto\n32.0,4,71.0,65,1836,21.0,74,3,toyota corolla 1200\n25.0,4,140.0,75,2542,17.0,74,1,chevrolet vega\n16.0,6,250.0,100,3781,17.0,74,1,chevrolet chevelle malibu classic\n16.0,6,258.0,110,3632,18.0,74,1,amc matador\n18.0,6,225.0,105,3613,16.5,74,1,plymouth satellite sebring\n16.0,8,302.0,140,4141,14.0,74,1,ford gran torino\n13.0,8,350.0,150,4699,14.5,74,1,buick century luxus (sw)\n14.0,8,318.0,150,4457,13.5,74,1,dodge coronet custom (sw)\n14.0,8,302.0,140,4638,16.0,74,1,ford gran torino (sw)\n14.0,8,304.0,150,4257,15.5,74,1,amc matador (sw)\n29.0,4,98.0,83,2219,16.5,74,2,audi fox\n26.0,4,79.0,67,1963,15.5,74,2,volkswagen dasher\n26.0,4,97.0,78,2300,14.5,74,2,opel manta\n31.0,4,76.0,52,1649,16.5,74,3,toyota corona\n32.0,4,83.0,61,2003,19.0,74,3,datsun 710\n28.0,4,90.0,75,2125,14.5,74,1,dodge colt\n24.0,4,90.0,75,2108,15.5,74,2,fiat 128\n26.0,4,116.0,75,2246,14.0,74,2,fiat 124 tc\n24.0,4,120.0,97,2489,15.0,74,3,honda civic\n26.0,4,108.0,93,2391,15.5,74,3,subaru\n31.0,4,79.0,67,2000,16.0,74,2,fiat x1.9\n19.0,6,225.0,95,3264,16.0,75,1,plymouth valiant custom\n18.0,6,250.0,105,3459,16.0,75,1,chevrolet nova\n15.0,6,250.0,72,3432,21.0,75,1,mercury monarch\n15.0,6,250.0,72,3158,19.5,75,1,ford maverick\n16.0,8,400.0,170,4668,11.5,75,1,pontiac catalina\n15.0,8,350.0,145,4440,14.0,75,1,chevrolet bel air\n16.0,8,318.0,150,4498,14.5,75,1,plymouth grand fury\n14.0,8,351.0,148,4657,13.5,75,1,ford ltd\n17.0,6,231.0,110,3907,21.0,75,1,buick century\n16.0,6,250.0,105,3897,18.5,75,1,chevroelt chevelle malibu\n15.0,6,258.0,110,3730,19.0,75,1,amc matador\n18.0,6,225.0,95,3785,19.0,75,1,plymouth fury\n21.0,6,231.0,110,3039,15.0,75,1,buick skyhawk\n20.0,8,262.0,110,3221,13.5,75,1,chevrolet monza 2+2\n13.0,8,302.0,129,3169,12.0,75,1,ford mustang ii\n29.0,4,97.0,75,2171,16.0,75,3,toyota corolla\n23.0,4,140.0,83,2639,17.0,75,1,ford pinto\n20.0,6,232.0,100,2914,16.0,75,1,amc gremlin\n23.0,4,140.0,78,2592,18.5,75,1,pontiac astro\n24.0,4,134.0,96,2702,13.5,75,3,toyota corona\n25.0,4,90.0,71,2223,16.5,75,2,volkswagen dasher\n24.0,4,119.0,97,2545,17.0,75,3,datsun 710\n18.0,6,171.0,97,2984,14.5,75,1,ford pinto\n29.0,4,90.0,70,1937,14.0,75,2,volkswagen rabbit\n19.0,6,232.0,90,3211,17.0,75,1,amc pacer\n23.0,4,115.0,95,2694,15.0,75,2,audi 100ls\n23.0,4,120.0,88,2957,17.0,75,2,peugeot 504\n22.0,4,121.0,98,2945,14.5,75,2,volvo 244dl\n25.0,4,121.0,115,2671,13.5,75,2,saab 99le\n33.0,4,91.0,53,1795,17.5,75,3,honda civic cvcc\n28.0,4,107.0,86,2464,15.5,76,2,fiat 131\n25.0,4,116.0,81,2220,16.9,76,2,opel 1900\n25.0,4,140.0,92,2572,14.9,76,1,capri ii\n26.0,4,98.0,79,2255,17.7,76,1,dodge colt\n27.0,4,101.0,83,2202,15.3,76,2,renault 12tl\n17.5,8,305.0,140,4215,13.0,76,1,chevrolet chevelle malibu classic\n16.0,8,318.0,150,4190,13.0,76,1,dodge coronet brougham\n15.5,8,304.0,120,3962,13.9,76,1,amc matador\n14.5,8,351.0,152,4215,12.8,76,1,ford gran torino\n22.0,6,225.0,100,3233,15.4,76,1,plymouth valiant\n22.0,6,250.0,105,3353,14.5,76,1,chevrolet nova\n24.0,6,200.0,81,3012,17.6,76,1,ford maverick\n22.5,6,232.0,90,3085,17.6,76,1,amc hornet\n29.0,4,85.0,52,2035,22.2,76,1,chevrolet chevette\n24.5,4,98.0,60,2164,22.1,76,1,chevrolet woody\n29.0,4,90.0,70,1937,14.2,76,2,vw rabbit\n33.0,4,91.0,53,1795,17.4,76,3,honda civic\n20.0,6,225.0,100,3651,17.7,76,1,dodge aspen se\n18.0,6,250.0,78,3574,21.0,76,1,ford granada ghia\n18.5,6,250.0,110,3645,16.2,76,1,pontiac ventura sj\n17.5,6,258.0,95,3193,17.8,76,1,amc pacer d/l\n29.5,4,97.0,71,1825,12.2,76,2,volkswagen rabbit\n32.0,4,85.0,70,1990,17.0,76,3,datsun b-210\n28.0,4,97.0,75,2155,16.4,76,3,toyota corolla\n26.5,4,140.0,72,2565,13.6,76,1,ford pinto\n20.0,4,130.0,102,3150,15.7,76,2,volvo 245\n13.0,8,318.0,150,3940,13.2,76,1,plymouth volare premier v8\n19.0,4,120.0,88,3270,21.9,76,2,peugeot 504\n19.0,6,156.0,108,2930,15.5,76,3,toyota mark ii\n16.5,6,168.0,120,3820,16.7,76,2,mercedes-benz 280s\n16.5,8,350.0,180,4380,12.1,76,1,cadillac seville\n13.0,8,350.0,145,4055,12.0,76,1,chevy c10\n13.0,8,302.0,130,3870,15.0,76,1,ford f108\n13.0,8,318.0,150,3755,14.0,76,1,dodge d100\n31.5,4,98.0,68,2045,18.5,77,3,honda accord cvcc\n30.0,4,111.0,80,2155,14.8,77,1,buick opel isuzu deluxe\n36.0,4,79.0,58,1825,18.6,77,2,renault 5 gtl\n25.5,4,122.0,96,2300,15.5,77,1,plymouth arrow gs\n33.5,4,85.0,70,1945,16.8,77,3,datsun f-10 hatchback\n17.5,8,305.0,145,3880,12.5,77,1,chevrolet caprice classic\n17.0,8,260.0,110,4060,19.0,77,1,oldsmobile cutlass supreme\n15.5,8,318.0,145,4140,13.7,77,1,dodge monaco brougham\n15.0,8,302.0,130,4295,14.9,77,1,mercury cougar brougham\n17.5,6,250.0,110,3520,16.4,77,1,chevrolet concours\n20.5,6,231.0,105,3425,16.9,77,1,buick skylark\n19.0,6,225.0,100,3630,17.7,77,1,plymouth volare custom\n18.5,6,250.0,98,3525,19.0,77,1,ford granada\n16.0,8,400.0,180,4220,11.1,77,1,pontiac grand prix lj\n15.5,8,350.0,170,4165,11.4,77,1,chevrolet monte carlo landau\n15.5,8,400.0,190,4325,12.2,77,1,chrysler cordoba\n16.0,8,351.0,149,4335,14.5,77,1,ford thunderbird\n29.0,4,97.0,78,1940,14.5,77,2,volkswagen rabbit custom\n24.5,4,151.0,88,2740,16.0,77,1,pontiac sunbird coupe\n26.0,4,97.0,75,2265,18.2,77,3,toyota corolla liftback\n25.5,4,140.0,89,2755,15.8,77,1,ford mustang ii 2+2\n30.5,4,98.0,63,2051,17.0,77,1,chevrolet chevette\n33.5,4,98.0,83,2075,15.9,77,1,dodge colt m/m\n30.0,4,97.0,67,1985,16.4,77,3,subaru dl\n30.5,4,97.0,78,2190,14.1,77,2,volkswagen dasher\n22.0,6,146.0,97,2815,14.5,77,3,datsun 810\n21.5,4,121.0,110,2600,12.8,77,2,bmw 320i\n21.5,3,80.0,110,2720,13.5,77,3,mazda rx-4\n43.1,4,90.0,48,1985,21.5,78,2,volkswagen rabbit custom diesel\n36.1,4,98.0,66,1800,14.4,78,1,ford fiesta\n32.8,4,78.0,52,1985,19.4,78,3,mazda glc deluxe\n39.4,4,85.0,70,2070,18.6,78,3,datsun b210 gx\n36.1,4,91.0,60,1800,16.4,78,3,honda civic cvcc\n19.9,8,260.0,110,3365,15.5,78,1,oldsmobile cutlass salon brougham\n19.4,8,318.0,140,3735,13.2,78,1,dodge diplomat\n20.2,8,302.0,139,3570,12.8,78,1,mercury monarch ghia\n19.2,6,231.0,105,3535,19.2,78,1,pontiac phoenix lj\n20.5,6,200.0,95,3155,18.2,78,1,chevrolet malibu\n20.2,6,200.0,85,2965,15.8,78,1,ford fairmont (auto)\n25.1,4,140.0,88,2720,15.4,78,1,ford fairmont (man)\n20.5,6,225.0,100,3430,17.2,78,1,plymouth volare\n19.4,6,232.0,90,3210,17.2,78,1,amc concord\n20.6,6,231.0,105,3380,15.8,78,1,buick century special\n20.8,6,200.0,85,3070,16.7,78,1,mercury zephyr\n18.6,6,225.0,110,3620,18.7,78,1,dodge aspen\n18.1,6,258.0,120,3410,15.1,78,1,amc concord d/l\n19.2,8,305.0,145,3425,13.2,78,1,chevrolet monte carlo landau\n17.7,6,231.0,165,3445,13.4,78,1,buick regal sport coupe (turbo)\n18.1,8,302.0,139,3205,11.2,78,1,ford futura\n17.5,8,318.0,140,4080,13.7,78,1,dodge magnum xe\n30.0,4,98.0,68,2155,16.5,78,1,chevrolet chevette\n27.5,4,134.0,95,2560,14.2,78,3,toyota corona\n27.2,4,119.0,97,2300,14.7,78,3,datsun 510\n30.9,4,105.0,75,2230,14.5,78,1,dodge omni\n21.1,4,134.0,95,2515,14.8,78,3,toyota celica gt liftback\n23.2,4,156.0,105,2745,16.7,78,1,plymouth sapporo\n23.8,4,151.0,85,2855,17.6,78,1,oldsmobile starfire sx\n23.9,4,119.0,97,2405,14.9,78,3,datsun 200-sx\n20.3,5,131.0,103,2830,15.9,78,2,audi 5000\n17.0,6,163.0,125,3140,13.6,78,2,volvo 264gl\n21.6,4,121.0,115,2795,15.7,78,2,saab 99gle\n16.2,6,163.0,133,3410,15.8,78,2,peugeot 604sl\n31.5,4,89.0,71,1990,14.9,78,2,volkswagen scirocco\n29.5,4,98.0,68,2135,16.6,78,3,honda accord lx\n21.5,6,231.0,115,3245,15.4,79,1,pontiac lemans v6\n19.8,6,200.0,85,2990,18.2,79,1,mercury zephyr 6\n22.3,4,140.0,88,2890,17.3,79,1,ford fairmont 4\n20.2,6,232.0,90,3265,18.2,79,1,amc concord dl 6\n20.6,6,225.0,110,3360,16.6,79,1,dodge aspen 6\n17.0,8,305.0,130,3840,15.4,79,1,chevrolet caprice classic\n17.6,8,302.0,129,3725,13.4,79,1,ford ltd landau\n16.5,8,351.0,138,3955,13.2,79,1,mercury grand marquis\n18.2,8,318.0,135,3830,15.2,79,1,dodge st. regis\n16.9,8,350.0,155,4360,14.9,79,1,buick estate wagon (sw)\n15.5,8,351.0,142,4054,14.3,79,1,ford country squire (sw)\n19.2,8,267.0,125,3605,15.0,79,1,chevrolet malibu classic (sw)\n18.5,8,360.0,150,3940,13.0,79,1,chrysler lebaron town @ country (sw)\n31.9,4,89.0,71,1925,14.0,79,2,vw rabbit custom\n34.1,4,86.0,65,1975,15.2,79,3,maxda glc deluxe\n35.7,4,98.0,80,1915,14.4,79,1,dodge colt hatchback custom\n27.4,4,121.0,80,2670,15.0,79,1,amc spirit dl\n25.4,5,183.0,77,3530,20.1,79,2,mercedes benz 300d\n23.0,8,350.0,125,3900,17.4,79,1,cadillac eldorado\n27.2,4,141.0,71,3190,24.8,79,2,peugeot 504\n23.9,8,260.0,90,3420,22.2,79,1,oldsmobile cutlass salon brougham\n34.2,4,105.0,70,2200,13.2,79,1,plymouth horizon\n34.5,4,105.0,70,2150,14.9,79,1,plymouth horizon tc3\n31.8,4,85.0,65,2020,19.2,79,3,datsun 210\n37.3,4,91.0,69,2130,14.7,79,2,fiat strada custom\n28.4,4,151.0,90,2670,16.0,79,1,buick skylark limited\n28.8,6,173.0,115,2595,11.3,79,1,chevrolet citation\n26.8,6,173.0,115,2700,12.9,79,1,oldsmobile omega brougham\n33.5,4,151.0,90,2556,13.2,79,1,pontiac phoenix\n41.5,4,98.0,76,2144,14.7,80,2,vw rabbit\n38.1,4,89.0,60,1968,18.8,80,3,toyota corolla tercel\n32.1,4,98.0,70,2120,15.5,80,1,chevrolet chevette\n37.2,4,86.0,65,2019,16.4,80,3,datsun 310\n28.0,4,151.0,90,2678,16.5,80,1,chevrolet citation\n26.4,4,140.0,88,2870,18.1,80,1,ford fairmont\n24.3,4,151.0,90,3003,20.1,80,1,amc concord\n19.1,6,225.0,90,3381,18.7,80,1,dodge aspen\n34.3,4,97.0,78,2188,15.8,80,2,audi 4000\n29.8,4,134.0,90,2711,15.5,80,3,toyota corona liftback\n31.3,4,120.0,75,2542,17.5,80,3,mazda 626\n37.0,4,119.0,92,2434,15.0,80,3,datsun 510 hatchback\n32.2,4,108.0,75,2265,15.2,80,3,toyota corolla\n46.6,4,86.0,65,2110,17.9,80,3,mazda glc\n27.9,4,156.0,105,2800,14.4,80,1,dodge colt\n40.8,4,85.0,65,2110,19.2,80,3,datsun 210\n44.3,4,90.0,48,2085,21.7,80,2,vw rabbit c (diesel)\n43.4,4,90.0,48,2335,23.7,80,2,vw dasher (diesel)\n36.4,5,121.0,67,2950,19.9,80,2,audi 5000s (diesel)\n30.0,4,146.0,67,3250,21.8,80,2,mercedes-benz 240d\n44.6,4,91.0,67,1850,13.8,80,3,honda civic 1500 gl\n33.8,4,97.0,67,2145,18.0,80,3,subaru dl\n29.8,4,89.0,62,1845,15.3,80,2,vokswagen rabbit\n32.7,6,168.0,132,2910,11.4,80,3,datsun 280-zx\n23.7,3,70.0,100,2420,12.5,80,3,mazda rx-7 gs\n35.0,4,122.0,88,2500,15.1,80,2,triumph tr7 coupe\n32.4,4,107.0,72,2290,17.0,80,3,honda accord\n27.2,4,135.0,84,2490,15.7,81,1,plymouth reliant\n26.6,4,151.0,84,2635,16.4,81,1,buick skylark\n25.8,4,156.0,92,2620,14.4,81,1,dodge aries wagon (sw)\n23.5,6,173.0,110,2725,12.6,81,1,chevrolet citation\n30.0,4,135.0,84,2385,12.9,81,1,plymouth reliant\n39.1,4,79.0,58,1755,16.9,81,3,toyota starlet\n39.0,4,86.0,64,1875,16.4,81,1,plymouth champ\n35.1,4,81.0,60,1760,16.1,81,3,honda civic 1300\n32.3,4,97.0,67,2065,17.8,81,3,subaru\n37.0,4,85.0,65,1975,19.4,81,3,datsun 210 mpg\n37.7,4,89.0,62,2050,17.3,81,3,toyota tercel\n34.1,4,91.0,68,1985,16.0,81,3,mazda glc 4\n34.7,4,105.0,63,2215,14.9,81,1,plymouth horizon 4\n34.4,4,98.0,65,2045,16.2,81,1,ford escort 4w\n29.9,4,98.0,65,2380,20.7,81,1,ford escort 2h\n33.0,4,105.0,74,2190,14.2,81,2,volkswagen jetta\n33.7,4,107.0,75,2210,14.4,81,3,honda prelude\n32.4,4,108.0,75,2350,16.8,81,3,toyota corolla\n32.9,4,119.0,100,2615,14.8,81,3,datsun 200sx\n31.6,4,120.0,74,2635,18.3,81,3,mazda 626\n28.1,4,141.0,80,3230,20.4,81,2,peugeot 505s turbo diesel\n30.7,6,145.0,76,3160,19.6,81,2,volvo diesel\n25.4,6,168.0,116,2900,12.6,81,3,toyota cressida\n24.2,6,146.0,120,2930,13.8,81,3,datsun 810 maxima\n22.4,6,231.0,110,3415,15.8,81,1,buick century\n26.6,8,350.0,105,3725,19.0,81,1,oldsmobile cutlass ls\n20.2,6,200.0,88,3060,17.1,81,1,ford granada gl\n17.6,6,225.0,85,3465,16.6,81,1,chrysler lebaron salon\n28.0,4,112.0,88,2605,19.6,82,1,chevrolet cavalier\n27.0,4,112.0,88,2640,18.6,82,1,chevrolet cavalier wagon\n34.0,4,112.0,88,2395,18.0,82,1,chevrolet cavalier 2-door\n31.0,4,112.0,85,2575,16.2,82,1,pontiac j2000 se hatchback\n29.0,4,135.0,84,2525,16.0,82,1,dodge aries se\n27.0,4,151.0,90,2735,18.0,82,1,pontiac phoenix\n24.0,4,140.0,92,2865,16.4,82,1,ford fairmont futura\n36.0,4,105.0,74,1980,15.3,82,2,volkswagen rabbit l\n37.0,4,91.0,68,2025,18.2,82,3,mazda glc custom l\n31.0,4,91.0,68,1970,17.6,82,3,mazda glc custom\n38.0,4,105.0,63,2125,14.7,82,1,plymouth horizon miser\n36.0,4,98.0,70,2125,17.3,82,1,mercury lynx l\n36.0,4,120.0,88,2160,14.5,82,3,nissan stanza xe\n36.0,4,107.0,75,2205,14.5,82,3,honda accord\n34.0,4,108.0,70,2245,16.9,82,3,toyota corolla\n38.0,4,91.0,67,1965,15.0,82,3,honda civic\n32.0,4,91.0,67,1965,15.7,82,3,honda civic (auto)\n38.0,4,91.0,67,1995,16.2,82,3,datsun 310 gx\n25.0,6,181.0,110,2945,16.4,82,1,buick century limited\n38.0,6,262.0,85,3015,17.0,82,1,oldsmobile cutlass ciera (diesel)\n26.0,4,156.0,92,2585,14.5,82,1,chrysler lebaron medallion\n22.0,6,232.0,112,2835,14.7,82,1,ford granada l\n32.0,4,144.0,96,2665,13.9,82,3,toyota celica gt\n36.0,4,135.0,84,2370,13.0,82,1,dodge charger 2.2\n27.0,4,151.0,90,2950,17.3,82,1,chevrolet camaro\n27.0,4,140.0,86,2790,15.6,82,1,ford mustang gl\n44.0,4,97.0,52,2130,24.6,82,2,vw pickup\n32.0,4,135.0,84,2295,11.6,82,1,dodge rampage\n28.0,4,120.0,79,2625,18.6,82,1,ford ranger\n31.0,4,119.0,82,2720,19.4,82,1,chevy s-10\n";
 </script>
     <script>/*
  * Slides interativos da aula 27 (resíduos, escala log e regressão linear
@@ -4520,6 +4589,193 @@ window.S27 = {"mpg":[18.0,15.0,18.0,16.0,17.0,15.0,14.0,14.0,14.0,15.0,15.0,14.0
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", quandoPronto);
   else quandoPronto();
+})();
+</script>
+    <script>/* Células de Python ao vivo nos slides (Pyodide).
+ *
+ * Um div `.py-vivo` com um bloco ```python``` vira um editor com botão "Rodar".
+ * O Python (numpy, pandas, statsmodels) começa a carregar assim que o deck
+ * abre; o arquivo auto_mpg_sub.csv do notebook fica disponível, junto com a
+ * função `regress` e os DataFrames `data` e `df`, como no notebook.
+ * Todas as células compartilham as variáveis, como num Jupyter.
+ * Atributo opcional: data-saida="#id" manda a saída para outro elemento.
+ * Atalhos no editor: Shift+Enter ou Ctrl+Enter rodam; Tab insere 4 espaços.
+ */
+(function () {
+  const URL_PY = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
+  let pronto = null;
+  let estado = { txt: "", cls: "" };
+
+  const SETUP = `
+import os, sys, io, ast, base64, traceback, warnings
+os.environ["MPLBACKEND"] = "agg"
+warnings.filterwarnings("ignore")
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from scipy import stats
+pd.set_option("display.width", 100)
+pd.set_option("display.max_columns", 12)
+
+def regress(Y, X):
+    X_cp = sm.add_constant(X)
+    model = sm.OLS(Y, X_cp)
+    results = model.fit()
+    return results
+
+data = pd.read_csv("auto_mpg_sub.csv")
+df = data[["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "model year"]].copy()
+_G = globals()
+
+def _rodar(src):
+    buf = io.StringIO()
+    velho = sys.stdout, sys.stderr
+    sys.stdout = sys.stderr = buf
+    img = ""
+    try:
+        arv = ast.parse(src)
+        ultimo = None
+        if arv.body and isinstance(arv.body[-1], ast.Expr):
+            ultimo = ast.Expression(arv.body.pop().value)
+        exec(compile(arv, "<célula>", "exec"), _G)
+        if ultimo is not None:
+            v = eval(compile(ultimo, "<célula>", "eval"), _G)
+            if v is not None:
+                r = v.as_text() if hasattr(v, "as_text") else repr(v)
+                if "<matplotlib" not in r and not r.startswith("Text("):
+                    print(r)
+        plt = sys.modules.get("matplotlib.pyplot")
+        if plt is not None and plt.get_fignums():
+            b = io.BytesIO()
+            plt.gcf().savefig(b, format="png", dpi=110, bbox_inches="tight")
+            plt.close("all")
+            img = base64.b64encode(b.getvalue()).decode()
+    except Exception as e:
+        tb = traceback.extract_tb(e.__traceback__)
+        linhas = [f"linha {f.lineno}: {f.line}" for f in tb if f.filename == "<célula>"]
+        print("\\n".join(linhas[-1:] + traceback.format_exception_only(type(e), e)).strip())
+    finally:
+        sys.stdout, sys.stderr = velho
+    return [buf.getvalue(), img]
+`;
+
+  function status(txt, cls) {
+    estado = { txt, cls };
+    document.querySelectorAll(".py-status").forEach((e) => { e.textContent = txt; e.className = "py-status " + cls; });
+  }
+
+  function carregarScript(src) {
+    return new Promise((ok, erro) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = ok;
+      s.onerror = () => erro(new Error("sem acesso a " + src));
+      document.head.appendChild(s);
+    });
+  }
+
+  function iniciarPython() {
+    if (pronto) return pronto;
+    status("carregando o Python...", "carregando");
+    pronto = (async () => {
+      await carregarScript(URL_PY + "pyodide.js");
+      const py = await window.loadPyodide({ indexURL: URL_PY });
+      await py.loadPackage(["numpy", "pandas", "statsmodels"]);
+      py.FS.writeFile("auto_mpg_sub.csv", window.S27_CSV);
+      await py.runPythonAsync(SETUP);
+      status("Python pronto", "pronto");
+      return py;
+    })().catch((e) => {
+      console.error("[s27_py]", e);
+      status("o Python não carregou (internet?). Clique em Rodar para tentar de novo.", "erro");
+      pronto = null;
+      throw e;
+    });
+    return pronto;
+  }
+
+  async function rodar(cel) {
+    const { area, saida, fig, botao } = cel;
+    botao.disabled = true;
+    saida.classList.remove("vazia", "falhou");
+    saida.textContent = "rodando...";
+    fig.hidden = true;
+    saida.style.display = "";
+    try {
+      const py = await iniciarPython();
+      const src = area.value;
+      if (/matplotlib|plt\./.test(src)) {
+        status("carregando o matplotlib...", "carregando");
+        await py.loadPackage("matplotlib");
+        status("Python pronto", "pronto");
+      }
+      const f = py.globals.get("_rodar");
+      const r = f(src);
+      const [txt, img] = r.toJs();
+      r.destroy();
+      saida.textContent = txt || (img ? "" : "(sem saída)");
+      saida.style.display = !txt && img ? "none" : "";
+      if (/^(linha \d+:|\w+(Error|Exception))/m.test(txt) && /Error|Exception/.test(txt)) saida.classList.add("falhou");
+      if (img) { fig.src = "data:image/png;base64," + img; fig.hidden = false; }
+    } catch (e) {
+      saida.style.display = "";
+      saida.classList.add("falhou");
+      saida.textContent = String(e.message || e);
+    } finally {
+      botao.disabled = false;
+    }
+  }
+
+  function montar(div) {
+    const code = div.querySelector("pre code") || div.querySelector("pre");
+    const src = (code ? code.textContent : "").replace(/\s+$/, "");
+    div.innerHTML = "";
+    const area = document.createElement("textarea");
+    area.className = "py-editor";
+    area.spellcheck = false;
+    area.value = src;
+    area.rows = Math.max(2, src.split("\n").length);
+    const barra = document.createElement("div");
+    barra.className = "py-barra";
+    const botao = document.createElement("button");
+    botao.className = "py-rodar";
+    botao.textContent = "▶ Rodar";
+    botao.title = "Shift+Enter";
+    const st = document.createElement("span");
+    st.className = "py-status " + estado.cls;
+    st.textContent = estado.txt;
+    barra.append(botao, st);
+    const alvo = div.dataset.saida ? document.querySelector(div.dataset.saida) : div;
+    const saida = document.createElement("pre");
+    saida.className = "py-saida vazia";
+    saida.textContent = "Clique em Rodar (ou Shift+Enter no código).";
+    const fig = document.createElement("img");
+    fig.className = "py-fig";
+    fig.hidden = true;
+    fig.alt = "gráfico gerado pelo Python";
+    div.append(area, barra);
+    alvo.append(saida, fig);
+    const cel = { area, saida, fig, botao };
+    botao.addEventListener("click", () => rodar(cel));
+    area.addEventListener("keydown", (ev) => {
+      ev.stopPropagation();
+      if (ev.key === "Enter" && (ev.shiftKey || ev.ctrlKey || ev.metaKey)) { ev.preventDefault(); rodar(cel); }
+      else if (ev.key === "Tab") {
+        ev.preventDefault();
+        const i = area.selectionStart;
+        area.setRangeText("    ", i, area.selectionEnd, "end");
+      } else if (ev.key === "Escape") area.blur();
+    });
+    area.addEventListener("input", () => { area.rows = Math.max(2, area.value.split("\n").length); });
+  }
+
+  function iniciar() {
+    const divs = document.querySelectorAll(".py-vivo");
+    divs.forEach(montar);
+    if (divs.length) iniciarPython().catch(() => {});
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
+  else iniciar();
 })();
 </script>
     
